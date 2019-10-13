@@ -34,15 +34,42 @@ export class RequestController extends CrudController {
         	this.instance.sumValue = Math.floor(this.instance.sumValue * 100.0) / 100.0;
         }
         
-        const onSelected = (fieldName, value) => {
+        const onSelected = (fieldName) => {
+       		const item = this.crudItemProduct.instance;
+
         	if (fieldName == "product") {
-				const item = this.serverConnection.services.stock.findOne({product:value});
-				this.crudItemProduct.instance.value = (item != null) ? item.value : 0.0;
+				const stock = this.serverConnection.services.stock.findOne({product:item.product});
+				item.value = (stock != null) ? stock.value : 0.0;
+        	} else if (fieldName == "value") {
+				item.valueItem = item.quantity * item.value;
         	}
         }
         // serverConnection, serviceName, fieldName, primaryKeyForeign, title, numMaxItems, queryCallback, selectCallback
         this.crudItemProduct = new CrudItem(this.serverConnection, "requestProduct", "request", this.primaryKey, 'Produtos', null, list => onProductsChanged(list), onSelected);
 		this.listItemCrud.push(this.crudItemProduct);
+    }
+
+    enableRequestService() {
+		if (this.serverConnection.services.requestService != undefined && this.serverConnection.services.requestService.params.access.update == true) {
+			const onChanged = (list) => {
+				this.instance.servicesValue = this.getSumValues(list);
+				this.instance.descValue = this.getSumDescValues(list);
+				this.instance.sumValue = this.instance.productsValue + this.instance.servicesValue + this.instance.transportValue - this.instance.descValue;
+				this.instance.sumValue = Math.floor(this.instance.sumValue * 100.0) / 100.0;
+			}
+
+			const onSelected = (fieldName) => {
+				const item = this.crudItemService.instance;
+
+				if (fieldName == "service") {
+				} else if (fieldName == "value") {
+					item.valueItem = item.quantity * item.value;
+				}
+			}
+			// serverConnection, serviceName, fieldName, primaryKeyForeign, title, numMaxItems, queryCallback, selectCallback
+			this.crudItemService = new CrudItem(this.serverConnection, "requestService", "request", this.primaryKey, 'Services', null, onChanged, onSelected);
+			this.listItemCrud.push(this.crudItemService);
+		}
     }
     
     enableRequestPayment() {
@@ -51,7 +78,9 @@ export class RequestController extends CrudController {
 		    	this.instance.paymentsValue = this.getSumValues(list);
 		    }
 		    
-		    const onSelected = (fieldName, value) => {
+		    const onSelected = (fieldName) => {
+		    	const payment = this.crudItemPayment.instance;
+
 	        	if (fieldName == "type") {
 						//(1, 'Dinheiro'),
 						//(2, 'Cheque'),
@@ -65,12 +94,12 @@ export class RequestController extends CrudController {
 						//(14, 'Duplicata Mercantil'),
 						//(15, 'Boleto Bancario'),
 	        		// value
-					this.crudItemPayment.instance.value = this.instance.sumValue - this.instance.paymentsValue;
+					payment.value = this.instance.sumValue - this.instance.paymentsValue;
 	        		// account
 	        		{
 						const accounts = this.crudItemPayment.fields.account.filterResults;
 
-						if (value == 1) {
+						if (payment.type == 1) {
 							if (accounts.length > 0) {
 								this.crudItemPayment.instance.account = accounts[accounts.length-1].id;
 							}
@@ -81,11 +110,11 @@ export class RequestController extends CrudController {
 						}
 	        		}
 	        		// due_date
-					if ([1,4,10,11,12,13].indexOf(value) >= 0) {
+					if ([1,4,10,11,12,13].indexOf(payment.type) >= 0) {
 						this.crudItemPayment.instance.dueDate = this.instance.date;
 					}
 					// payday
-					if ([1,4,10,11,12,13].indexOf(value) >= 0) {
+					if ([1,4,10,11,12,13].indexOf(payment.type) >= 0) {
 						this.crudItemPayment.instance.payday = this.instance.date;
 					}
 					// update UI
@@ -179,16 +208,16 @@ export class RequestController extends CrudController {
 
 		this.fields.type.readOnly = true;
 
+		if (this.serverConnection.services.requestService == undefined) {
+			this.fields.servicesValue.hiden = true;
+		}
+
 		if (this.serverConnection.services.requestFreight == undefined) {
 			this.fields.transportValue.hiden = true;
 		}
 
 		if (this.serverConnection.services.requestPayment == undefined) {
 			this.fields.paymentsValue.hiden = true;
-		}
-
-		if (this.serverConnection.services.requestService == undefined) {
-			this.fields.servicesValue.hiden = true;
 		}
     }
 
