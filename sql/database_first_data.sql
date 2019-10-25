@@ -24,6 +24,8 @@ INSERT INTO rufs_service (name, menu, title, fields) VALUES ('requestPayment', '
 
 INSERT INTO rufs_service (name, menu, title, fields) VALUES ('stock', 'requestProduct', 'Estoque de Produtos', '{"id":{"hiden":false,"isClonable":false,"title":"Estoque"}}');
 
+UPDATE rufs_service SET fields=jsonb_set(fields::jsonb,'{request,document}','"products"') WHERE name = 'requestProduct';
+
 UPDATE rufs_service SET save_and_exit = false WHERE name = 'product';
 
 INSERT INTO request_type (id, description, name) VALUES (1, NULL, 'Compra');
