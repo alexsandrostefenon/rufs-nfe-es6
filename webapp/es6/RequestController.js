@@ -117,8 +117,6 @@ export class RequestController extends CrudController {
 					if ([1,4,10,11,12,13].indexOf(payment.type) >= 0) {
 						this.crudItemPayment.instance.payday = this.instance.date;
 					}
-					// update UI
-					this.crudItemPayment.setValues(this.crudItemPayment.instance);
 	        	}
 		    }
 	        // serverConnection, serviceName, fieldName, primaryKeyForeign, title, numMaxItems, queryCallback, selectCallback
