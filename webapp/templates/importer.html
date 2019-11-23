@@ -1,0 +1,28 @@
+<h4>Importar NFe consumidor - SEFAZ-RS</h4>
+
+<form name="form" class="form-horizontal" role="form">
+    <div ng-show="displayError" class="alert alert-danger">
+        <strong>Error!</strong> Something broke. Retry, or cancel and start afresh.
+    </div>
+    
+	<div class="form-group" ng-class="{'has-error': form.videoInput.$invalid}">
+	    <label for="videoInput" class="col-sm-2 control-label">Dispositivo de video</label>
+	
+	    <div class="col-sm-10">
+			<select class="form-control" id="videoInput" name="videoInput" ng-required="true" ng-model="vm.videoInput" ng-options="device for device in vm.listDevices" ng-change="vm.deviceChange()"></select>
+	    </div>
+	</div>
+    
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+		<button class="btn btn-default" ng-click="vm.exit()"><span class="glyphicon glyphicon-remove"></span> Sair</button>
+      </div>
+    </div>
+</form>
+
+<video id="qr-video" ng-if="vm.videoInput != 'File'"></video>
+
+<input id="input-file" ng-show="vm.videoInput == 'File'" type="file"></input>
+<canvas id="out-canvas" width="320" height="240"></canvas>
+
+<pre>{{vm.result}}</pre>

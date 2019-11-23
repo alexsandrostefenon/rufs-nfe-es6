@@ -12,7 +12,11 @@ class NfeMicroService extends MicroServiceServer {
 	}
 
 	onRequest(req, res, next, resource, action) {
-		return RequestFilter.processRequest(req, res, next, this.entityManager, this, resource, action);
+		if (action == "sefaz-rs") {
+			const url = "https://www.sefaz.rs.gov.br";
+		} else {
+			return RequestFilter.processRequest(req, res, next, this.entityManager, this, resource, action);
+		}
 	}
 
 	listen() {

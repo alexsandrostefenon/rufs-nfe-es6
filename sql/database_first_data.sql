@@ -1,32 +1,33 @@
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('paymentType', 'requestPayment', 'Tipo de Pagamento', '{}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('bacenCountry', 'person', 'Códigos de Países', '{}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('ibgeUf', 'person', 'Códigos dos Estados', '{}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('ibgeCity', 'person', 'Códigos das Cidades', '{"uf":{"shortDescription":true}}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('ibgeCnae', 'person', 'Classificação Nacional de Atividades Econômicas', '{"id":{"shortDescription":true}}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('camexNcm', 'product', 'NCM', '{"id":{"shortDescription":true}}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('confazCest', 'product', 'Código Especificador da Substituição Tributária', '{"id":{"shortDescription":true}}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('nfeCfop', 'requestProduct', 'CFOP', '{"id":{"shortDescription":true}}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('nfeStIcmsOrigem', 'product', 'Origem do Produto', '{"id":{"shortDescription":true}}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('nfeTaxGroup', 'requestProduct', 'Grupo Tributário', '{}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('paymentType', 'Tipo de Pagamento', '{}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('bacenCountry', 'Códigos de Países', '{}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('ibgeUf', 'Códigos dos Estados', '{}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('ibgeCity', 'Códigos das Cidades', '{"uf":{"shortDescription":true}}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('ibgeCnae', 'Classificação Nacional de Atividades Econômicas', '{"id":{"shortDescription":true}}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('camexNcm', 'NCM', '{"id":{"shortDescription":true}}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('confazCest', 'Código Especificador da Substituição Tributária', '{"id":{"shortDescription":true}}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('nfeCfop', 'CFOP', '{"id":{"shortDescription":true}}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('nfeStIcmsOrigem', 'Origem do Produto', '{"id":{"shortDescription":true}}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('nfeTaxGroup', 'Grupo Tributário', '{}');
 
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('account', 'requestPayment', 'Contas Bancárias', '{}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('person', 'person', 'Cadastros de Clientes e Fornecedores', '{}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('product', 'product', 'Produtos, Peças e Componentes', '{}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('barcode', 'product', 'Código de Barras de fornecedores de produtos', '{"product":{"isClonable":false,"title":"Código de Barras dos fornecedores"}}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('requestType', 'request', 'Tipo de Requisição', '{}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('stockAction', 'requestProduct', 'Ação sobre o Estoque', '{}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('requestState', 'request', 'Situação da Requisição', '{"name":{"shortDescription":true},"type":{"shortDescription":true}}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('request', 'request', 'Requisições de Entrada e Saída', '{"date":{"orderIndex":1,"sortType":"desc"},"type":{"tableVisible":false}}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('requestNfe', 'report', 'Nota Fiscal Eletrônica', '{"indpag":{"options":"0,1,2"},"iddest":{"options":"1,2,3"},"cdv":{"hiden":true},"indfinal":{"options":"0,1"},"indpres":{"options":"0,1,2,3,4,9"}}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('requestFreight', 'report', 'Frete', '{}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('requestProduct', 'report', 'Entrada e Saída de Produtos', '{}');
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('requestPayment', 'report', 'Pagamentos', '{"balance":{"readOnly":true}}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('account', 'Contas Bancárias', '{}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('person', 'Cadastros de Clientes e Fornecedores', '{}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('product', 'Produtos, Peças e Componentes', '{}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('service', 'Serviços', '{}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('barcode', 'Código de Barras de fornecedores de produtos', '{"product":{"isClonable":false,"title":"Código de Barras dos fornecedores"}}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('requestType', 'Tipo de Requisição', '{}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('stockAction', 'Ação sobre o Estoque', '{}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('requestState', 'Situação da Requisição', '{"name":{"shortDescription":true},"type":{"shortDescription":true}}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('request', 'Requisições de Entrada e Saída', '{"date":{"orderIndex":1,"sortType":"desc"},"type":{"tableVisible":false}}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('requestNfe', 'Nota Fiscal Eletrônica', '{"indpag":{"options":"0,1,2"},"iddest":{"options":"1,2,3"},"cdv":{"hiden":true},"indfinal":{"options":"0,1"},"indpres":{"options":"0,1,2,3,4,9"}}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('requestFreight', 'Frete', '{}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('requestProduct', 'Entrada/Saída de Produtos', '{}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('requestService', 'Serviços Requisitados/Prestados', '{}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('requestPayment', 'Pagamentos', '{"balance":{"readOnly":true}}');
 
-INSERT INTO rufs_service (name, menu, title, fields) VALUES ('stock', 'requestProduct', 'Estoque de Produtos', '{"id":{"hiden":false,"isClonable":false,"title":"Estoque"}}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('stock', 'Estoque de Produtos', '{"id":{"hiden":false,"isClonable":false,"title":"Estoque"}}');
 
 UPDATE rufs_service SET fields=jsonb_set(fields::jsonb,'{request,document}','"products"') WHERE name = 'requestProduct';
-
-UPDATE rufs_service SET save_and_exit = false WHERE name = 'product';
+UPDATE rufs_service SET fields=jsonb_set(fields::jsonb,'{request,document}','"services"') WHERE name = 'requestService';
 
 INSERT INTO request_type (id, description, name) VALUES (1, NULL, 'Compra');
 INSERT INTO request_type (id, description, name) VALUES (2, NULL, 'Venda');
@@ -119,7 +120,7 @@ INSERT INTO rufs_group_owner (name) VALUES ('nfe_guest_group');
 
 INSERT INTO rufs_group (name) VALUES ('Mercado');
 
-INSERT INTO rufs_user (rufs_group_owner, name, password, path, menu, roles, show_system_menu, routes) SELECT id, 'nfe_guest', '123456', 'request/search', '{"buy":{"menu":"actions","label":"Compra","path":"request/new?overwrite={\"type\":1,\"state\":10}"},"sale":{"menu":"actions","label":"Venda","path":"request/new?overwrite={\"type\":2,\"state\":10}"},"requestPayment":{"menu":"form","label":"Financeiro","path":"request_payment/search"},"stock":{"menu":"form","label":"Estoque","path":"stock/search"},"product":{"menu":"form","label":"Produtos","path":"product/search"},"person":{"menu":"form","label":"Clientes e Fornecedores","path":"person/search"},"requests":{"menu":"form","label":"Requisições","path":"request/search"},"account":{"menu":"form","label":"Contas","path":"account/search"}}', '{"crudTranslation":{},"crudGroupOwner":{},"crudGroup":{},"nfeCfop":{},"bacenCountry":{},"ibgeUf":{},"ibgeCity":{},"ibgeCnae":{},"nfeTaxGroup":{},"camexNcm":{},"account":{"create":true},"stockAction":{},"requestType":{},"requestState":{},"paymentType":{},"person":{"create":true,"update":true},"nfeStIcmsOrigem":{},"product":{"create":true,"update":true},"barcode":{"create":true,"update":true},"request":{"create":true,"update":true},"requestProduct":{"create":true,"update":true,"delete":true},"requestPayment":{"create":true,"update":true,"delete":true},"requestNfe":{"create":true,"update":true,"delete":true},"requestFreight":{"create":true,"update":true,"delete":true},"requestService":{"create":true,"update":true,"delete":true},"stock":{"create":true,"update":true}}', false, '[{"path":"/app/request/:action","controller":"/nfe/es6/RequestController"}]' FROM rufs_group_owner WHERE name='nfe_guest_group';
+INSERT INTO rufs_user (rufs_group_owner, name, password, path, menu, roles, show_system_menu, routes) SELECT id, 'nfe_guest', '123456', 'request/search', '{"import":{"menu":"actions","label":"Importar","path":"request/import?overwrite.type=1&overwrite.state=10"},"buy":{"menu":"actions","label":"Compra","path":"request/new?overwrite={\"type\":1,\"state\":10}"},"sale":{"menu":"actions","label":"Venda","path":"request/new?overwrite={\"type\":2,\"state\":10}"},"requestPayment":{"menu":"form","label":"Financeiro","path":"request_payment/search"},"stock":{"menu":"form","label":"Estoque","path":"stock/search"},"product":{"menu":"form","label":"Produtos","path":"product/search"},"person":{"menu":"form","label":"Clientes e Fornecedores","path":"person/search"},"requests":{"menu":"form","label":"Requisições","path":"request/search"},"account":{"menu":"form","label":"Contas","path":"account/search"}}', '{"crudTranslation":{},"crudGroupOwner":{},"crudGroup":{},"nfeCfop":{},"bacenCountry":{},"ibgeUf":{},"ibgeCity":{},"ibgeCnae":{},"nfeTaxGroup":{},"camexNcm":{},"account":{"create":true},"stockAction":{},"requestType":{},"requestState":{},"paymentType":{},"person":{"create":true,"update":true},"nfeStIcmsOrigem":{},"product":{"create":true,"update":true},"service":{"create":true,"update":true},"barcode":{"create":true,"update":true},"request":{"create":true,"update":true},"requestProduct":{"create":true,"update":true,"delete":true},"requestService":{"create":true,"update":true,"delete":true},"requestPayment":{"create":true,"update":true,"delete":true},"requestNfe":{"create":true,"update":true,"delete":true},"requestFreight":{"create":true,"update":true,"delete":true},"requestService":{"create":true,"update":true,"delete":true},"stock":{"create":true,"update":true}}', false, '[{"path":"/app/request/:action","controller":"/nfe/es6/RequestController"}]' FROM rufs_group_owner WHERE name='nfe_guest_group';
 
 INSERT INTO rufs_group_user (rufs_user, rufs_group) SELECT u.id, g.id FROM rufs_user AS u, rufs_group AS g WHERE u.name='nfe_guest' AND g.name='Mercado';
 

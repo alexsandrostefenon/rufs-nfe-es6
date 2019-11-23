@@ -1,5 +1,6 @@
 import {CrudController} from "/crud/es6/CrudController.js";
 import {CrudItem} from "/crud/es6/CrudItem.js";
+import {NfeImporterController} from "./NfeImporterController.js";
 
 export class RequestController extends CrudController {
 
@@ -198,6 +199,7 @@ export class RequestController extends CrudController {
 
     process(action, params) {
     	super.process(action, params);
+		// TODO : load saveAndExit from method process(action,params)
     	this.rufsService.params.saveAndExit = false;
 
     	if (action == "new" || action == "edit") {
@@ -217,6 +219,95 @@ export class RequestController extends CrudController {
 		if (this.serverConnection.services.requestPayment == undefined) {
 			this.fields.paymentsValue.hiden = true;
 		}
+
+		if (action == "import") {
+			this.templateModel = "/nfe/templates/importer.html";
+			this.setValues(params.overwrite);
+			this.listDevices = ["File"];
+			this.nfeImporter = new NfeImporterController();
+			// QRCODE reader Copyright 2011 Lazar Laszlo, http://www.webqr.com
+			qrcode.canvas_qr2 = document.createElement('canvas');
+			qrcode.canvas_qr2.id = "qr-canvas";
+			qrcode.qrcontext2 = qrcode.canvas_qr2.getContext('2d');
+	//		qrcode.canvas_qr2.width = video.videoWidth;
+	//		qrcode.canvas_qr2.height = video.videoHeight;
+
+			qrcode.callback = (response) => {
+				if (response.startsWith("error") == false) {
+					const chaveNFe = response.substr(response.indexOf("chNFe=")+6, 44);
+					this.nfeImporter.nfeImport(chaveNFe);
+				}
+			};
+
+			this.serverConnection.$q.when(navigator.mediaDevices.enumerateDevices()).then((devices) => {
+			  devices.forEach((device) => {
+				if (device.kind === "videoinput") {
+					this.listDevices.push(device.deviceId);
+					console.log(device);
+				}
+			  });
+			});
+		}
+    }
+	
+    stop(stream) {
+    	stream.getTracks().forEach(function(track) {
+            track.stop();
+        });
+    }
+    
+    play(stream) {
+		const video = document.getElementById("qr-video");
+		video.srcObject = stream;		
+		
+		let processImage = () => {
+			if (document.getElementById("qr-video") != undefined) {
+				qrcode.qrcontext2.drawImage(video,0,0);
+
+				try {
+						qrcode.decode();
+						this.stop(stream);
+						this.$scope.$apply();
+				} catch (e) {       
+						console.log(e);
+						setTimeout(processImage, 1000);
+				}
+			} else {
+				this.stop(stream);
+			}
+		}
+    
+		video.play().then(() => {
+			processImage();
+		});
+    }
+
+    deviceChange() {
+    	if (this.videoInput == "File") {
+    		document.getElementById("input-file").onchange = eventFile => {
+    	    	for (let file of eventFile.target.files) {
+    	            let reader = new FileReader();
+    	            
+    	            reader.onload = eventReader => {
+    	      		    const base64data = eventReader.target.result;
+    	      		    qrcode.decode(base64data);
+						Quagga.decodeSingle({decoder: {readers: ["code_128_reader"]}, src: base64data}, result => {
+						    if (result.codeResult) {
+						    	this.nfeImporter.nfeImport(result.codeResult.code);
+						    }
+						});
+    	            };
+    	              
+    	            reader.readAsDataURL(file);	
+    	        }
+    		};
+    	} else {
+    	      let options={'deviceId': {'exact':this.videoInput}, 'facingMode':'environment'};
+    		  
+    		  navigator.mediaDevices.getUserMedia({video: options, audio: false}).then((stream) => {
+    			this.play(stream);
+    		  });
+    	}
     }
 
 }
