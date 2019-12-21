@@ -1,9 +1,9 @@
+import fs from "fs";
+
 export class NfeImporterController {
     
     nfeImport(chaveNFe) {
-    	const url = 
-    		//"sefaz-rs/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-COM_2.asp" + "?chaveNFe=" + chaveNFe + "&HML=false&NFCE63968B6";
-    		"sefaz-rs/NFE/NFE-NFC.aspx?chaveNFe=43191147427653001359650430000800181007510101";
+    	const url = "/nfe/rest/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-COM_2.asp" + "?chaveNFe=" + chaveNFe + "&HML=false&NFCE63968B6";
     	fetch(url).then(response => {
     		return response.text();
     	}).then(text => {
@@ -260,11 +260,47 @@ request_nfe :
     	tpAmb integer default 1,-- 1=Produção/2=Homologação
     	value_issqn numeric(9,2) default 0.00,
 */
-    }
+	}
+	
+	static formatHtml(text) {
+		const posIni = text.indexOf("<html><");
+
+		if (posIni >= 0) {
+			const posEnd = text.indexOf("</html>", posIni);
+
+			if (posEnd > 0)
+				text = text.substring(posIni, posEnd+7);
+		}
+
+		text = text.replace(/<script.*\/script>/g, "");
+		fs.writeFileSync(`/tmp/nfe00.html`, text);
+		text = text.replace(/><div/g, ">\n<div");
+		fs.writeFileSync(`/tmp/nfe01.html`, text);
+		text = text.replace(/<fieldset/g, ">\n\t$&");
+		fs.writeFileSync(`/tmp/nfe02.html`, text);
+		text = text.replace(/<label/g, "\n\t\t$&");
+		fs.writeFileSync(`/tmp/nfe03.html`, text);
+		text = text.replace(/<span>\n +/g, "<span>");
+		fs.writeFileSync(`/tmp/nfe04.html`, text);
+		text = text.replace(/\n +<\/span>/g, "</span>");
+		fs.writeFileSync(`/tmp/nfe05.html`, text);
+		text = text.replace(/<label>\n +/g, "<label>");
+		fs.writeFileSync(`/tmp/nfe06.html`, text);
+		text = text.replace(/\n +<\/label>/g, "</label>");
+		fs.writeFileSync(`/tmp/nfe07.html`, text);
+		text = text.replace(/(\d)\n +/g, "$1 ");
+		fs.writeFileSync(`/tmp/nfe08.html`, text);
+		text = text.replace(/(-|:| )\n +/g, "$1 ");// não está pegando o caso com espaço
+		fs.writeFileSync(`/tmp/nfe09.html`, text);
+		// prod		
+		text = text.replace(/<td class="fixo(-\w+)+"><span/g, "\n\t\t$&");
+		fs.writeFileSync(`/tmp/nfe10.html`, text);
+		text = text.replace(/<table class="toggle box">/g, "\n\t\t$&");
+		fs.writeFileSync(`/tmp/nfe11.html`, text);
+		return text;
+	}
     
 	static parseHtml(html) {
-		const obj = {};
-		
 		const parseDiv = (mapOut, div, strLabelIni, strLabelEnd) => {
 			div.split(strLabelIni).forEach((item, index) => {
 				if (index > 0) {
@@ -321,44 +357,82 @@ request_nfe :
 			
 			return obj;
 		}
-		
-		html.split("<div id=\"").forEach((div, indexDiv) => {
-			let divName = "nfe";
-			
-			if (indexDiv > 0) {
-				divName = div.substring(0, div.indexOf("\""));
-			}
-			
-			if (divName == "Prod") {
-				obj.prod = [];
-				
-				div.split("<table class=\"toggle box\">").forEach((divProd, indexDivProd) => {
-					if (indexDivProd > 0) {
-						const prod = new Map();
-						parseDiv(prod, divProd, "<label>", "</label><span>");
-						parseDiv(prod, divProd, "<td class=\"", "\"><span>");
-						obj.prod.push(prod);
-					}
-				});
-			} else  if (divName == "Cobranca") {
-				obj.cob = [];
-				
-				div.split("<table class=\"box\">").forEach((table, tableIndex) => {
-					if (tableIndex > 0) {
-						obj.cob.push(parseTable(table));
-					}
-				});
-			} else if (divName.startsWith("aba_nft") == false) {
-				divName = divName.toLowerCase();
-				
-				if (obj[divName] == undefined) {
-					obj[divName] = new Map();
+
+		const labelToCamelCase = label => label.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\W+/g, "_").replace(/_./g, str => str.substring(1).toUpperCase());
+
+		const parseFields = text => {
+			const obj = {};
+			const regExp = /<label>(.*)</label><span>(.*)</span>/g;
+			let regExpResult;
+
+			while ((regExpResult = regExp.exec(text)) !== null) {
+				const name = labelToCamelCase(regExpResult[0]);
+
+				if (obj[name] == undefined) {
+					const value = regExpResult[1];
+					obj[name] = value.trim();
+				} else {
+					console.error(`TODO`);
 				}
-				
-				parseDiv(obj[divName], div, "<label>", "</label><span>");
-				parseDiv(obj[divName], div, "<td class=\"", "\"><span>");
 			}
-		});
+
+			return obj;
+		}
+
+		const parseFieldSets = text => {
+			const ret = {};
+
+			const splits = text.split(/<fieldset><legend>(.*)<\/legend>|<fieldset><legend class="titulo-aba">(.*)<\/legend>/);
+			recs.shift();
+
+			for (let i = 0; i < (splits.length-1); i++) {
+				const sectionName = labelToCamelCase(splits[i]);
+
+				if (ret[sectionName] == undefined) {
+					ret[sectionName] = parseFields(splits[++i]);
+				} else {
+					console.error(`TODO`);
+				}
+			}
+		
+			return ret;
+		}
+		
+		const recs = html.split(/<div id="(\w+)" class="GeralXslt">|<div id="(\w+)" op="\d" class="GeralXslt"|<div( )class="GeralXslt">/);
+		recs.shift();
+		const obj = {};
+
+		for (let i = 0; i < (recs.length-1); i++) {
+			const name = labelToCamelCase(recs[i]);
+			const rec = recs[++i];
+
+			if (obj[name] == undefined) {
+				if (name == "prod") {
+					obj.prod = [];
+					
+					rec.split(/<td class="fixo-prod-serv-numero"><span>/).forEach((divProd, indexDivProd) => {
+						if (indexDivProd > 0) {
+							const prod = new Map();
+							parseDiv(prod, divProd, "<label>", "</label><span>");
+							parseDiv(prod, divProd, "<td class=\"", "\"><span>");
+							obj.prod.push(prod);
+						}
+					});
+				} else  if (name == "cobranca") {
+					obj.cob = [];
+					
+					rec.split("<table class=\"box\">").forEach((table, tableIndex) => {
+						if (tableIndex > 0) {
+							obj.cob.push(parseTable(table));
+						}
+					});
+				} else {
+					obj[name] = parseFieldSets(rec);
+				}
+			} else {
+				console.error(`TODO`);
+			}
+		}
 		
 		console.log("parseHtml:", obj);
 		return obj;

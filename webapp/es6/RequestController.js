@@ -234,7 +234,15 @@ export class RequestController extends CrudController {
 
 			qrcode.callback = (response) => {
 				if (response.startsWith("error") == false) {
-					const chaveNFe = response.substr(response.indexOf("chNFe=")+6, 44);
+					console.log(`[RequestController.qrcode] :`, response);
+					let chaveNFe;
+
+					if (response.includes("?chNFe=") == true) {
+						chaveNFe = response.substr(response.indexOf("?chNFe=")+7, 44);
+					} else if (response.includes("?p=") == true) {
+						chaveNFe = response.substr(response.indexOf("?p=")+3, 44);
+					}
+					
 					this.nfeImporter.nfeImport(chaveNFe);
 				}
 			};
@@ -293,6 +301,7 @@ export class RequestController extends CrudController {
     	      		    qrcode.decode(base64data);
 						Quagga.decodeSingle({decoder: {readers: ["code_128_reader"]}, src: base64data}, result => {
 						    if (result.codeResult) {
+						    	console.log(`[RequestController.deviceChange.File] : Quagga:`, result.codeResult.code);
 						    	this.nfeImporter.nfeImport(result.codeResult.code);
 						    }
 						});
