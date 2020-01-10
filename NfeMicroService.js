@@ -58,13 +58,17 @@ class NfeMicroService extends MicroServiceServer {
 }
 
 NfeMicroService.checkStandalone();
-
+/*
 const chaveNFe = "43191293209765016110653110002321001004193718";
 const text = fs.readFileSync(`nfe_${chaveNFe}.html`, "utf8");
 const html = NfeImporterController.formatHtml(text);
 fs.writeFileSync(`nfe_${chaveNFe}_formated.html`, html);
 const data = NfeImporterController.parseHtml(html);
+
+fs.writeFileSync(`nfe_${chaveNFe}_formated.json`, JSON.stringify(data, (k, v) => v instanceof(Map) ? Array.from(v.keys()) : v, "\t"));
+
 const nfeImporterController = new NfeImporterController();
 nfeImporterController.exportNfe(data);
+*/
 
 export {NfeMicroService};

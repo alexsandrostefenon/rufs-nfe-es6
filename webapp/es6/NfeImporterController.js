@@ -1,4 +1,4 @@
-import fs from "fs";
+//import fs from "fs";
 
 export class NfeImporterController {
     
@@ -57,48 +57,48 @@ export class NfeImporterController {
 			return new Number(str);
     	};
     	
-        const extract = (mapIn, objOut, keys, fields, typeOut) => {
-        	for (let i = 0; i < keys.length; i++) {
-        		let key = keys[i];
-            	let ret = undefined;
-            	
-            	if (mapIn.has(key) == true) {
-            		let str = mapIn.get(key);
-            		
-            		if (str.length > 0) {
-                		if (typeOut == "number") {
-                			ret = parseNumber(str);
-                		} else if (typeOut == "date") {
-                			ret = parseDate(str);
-                		} else {
-                			ret = str;
-                		}
-            		}
-            		
-            		mapIn.delete(key);
-            	}
-            	
-        		objOut[fields[i]] = ret;
-        	}
-        }
+        const extract = (obj, objOut, keys, fields, typeOut) => {
+			for (let [fieldName, field] of Object.entries(obj)) {
+				if (field instanceof Map) {
+					for (let i = 0; i < keys.length; i++) {
+						let key = keys[i];
+						let ret = undefined;
+						
+						if (field.has(key) == true) {
+							let str = field.get(key);
+							
+							if (str.length > 0) {
+								if (typeOut == "number") {
+									ret = parseNumber(str);
+								} else if (typeOut == "date") {
+									ret = parseDate(str);
+								} else {
+									ret = str;
+								}
+							}
+							
+							objOut[fields[i]] = ret;
+							field.delete(key);
+						}
+					}
+				} else {
+					extract(field, objOut, keys, fields, typeOut);
+				}
+			}
+		}
 // NFE
-    	const nfe = {};
-    	nfe.nfe_id = obj.nfe.get("Chave de Acesso").replace(/ /g,'');
-    	obj.nfe.delete("Chave de Acesso");
+		const nfe = {};
     	
-    	extract(obj.nfe, nfe, ["Versão XML", "Versão do Processo", "Natureza da Operação"], ["versao", "verproc", "natop"]);
+    	extract(obj, nfe, ["Chave de Acesso", "Versão XML", "Versão do Processo", "Natureza da Operação"], ["nfe_id", "versao", "verproc", "natop"]);
     	
-    	extract(obj.nfe, nfe, 
+    	extract(obj, nfe, 
     			["Modelo", "Série", "Número", "Destino da operação", "Consumidor final", "Presença do Comprador", "Processo", "Tipo de Emissão", "Tipo da Operação", "Forma de Pagamento", "Finalidade"], 
     			["mod", "serie", "nnf", "iddest", "indfinal", "indpres", "procemi", "tpemis", "tpnf", "indpag", "finnfe"], 
     			"number");
 
-    	extract(obj.nfe, nfe, ["Data de Emissão", "Data Saída/Entrada"], ["dhemi", "dhsaient"], "date");
+    	extract(obj, nfe, ["Data de Emissão", "Data Saída/Entrada"], ["dhemi", "dhsaient"], "date");
 
-    	extract(obj.destrem, nfe, 
-    			["Indicador IE"], 
-    			["indiedest"], 
-    			"number");
+    	extract(obj.destRem, nfe, ["Indicador IE"], ["indiedest"], "number");
 
     	extract(obj.totais, nfe, 
     			["Valor Total do II", "Valor Total do IPI", "Valor do PIS", "Valor da COFINS", "Valor do ICMS", "Valor ICMS Substituição", "Valor Aproximado dos Tributos"], 
@@ -106,8 +106,8 @@ export class NfeImporterController {
     			"number");
 // Emitente
     	nfe.personEmitente = {};
-    	nfe.personEmitente.uf = getUfCode(obj.emitente.get("UF"));
-    	obj.emitente.delete("UF");
+    	nfe.personEmitente.uf = getUfCode(obj.emitente.dadosDoEmitente.get("UF"));
+    	obj.emitente.dadosDoEmitente.delete("UF");
     	// "Inscrição Estadual do Substituto Tributário" => "person.ie_st"
     	// "Município da Ocorrência do Fato Gerador do ICMS" => ???
     	extract(obj.emitente, nfe.personEmitente,
@@ -120,15 +120,15 @@ export class NfeImporterController {
     			"number");
 // Dest
     	nfe.personDest = {};
-    	nfe.personDest.uf = getUfCode(obj.destrem.get("UF"));
-    	obj.destrem.delete("UF");
+    	nfe.personDest.uf = getUfCode(obj.destRem.dadosDoDestinatario.get("UF"));
+    	obj.destRem.dadosDoDestinatario.delete("UF");
     	// "Inscrição Estadual do Substituto Tributário" => "person.ie_st"
     	// "Município da Ocorrência do Fato Gerador do ICMS" => ???
-    	extract(obj.destrem, nfe.personDest,
+    	extract(obj.destRem, nfe.personDest,
     			["Nome / Razão Social", "Nome Fantasia", "CNPJ", "CPF", "Inscrição Estadual", "IM", "CEP", "Bairro / Distrito", "Endereço", "Telefone", "Inscrição SUFRAMA", "E-mail"],
     			["name", "fantasy", "cnpj_cpf", "cnpj_cpf", "ie_rg", "im", "zip", "district", "address", "phone", "suframa", "email"]);
     	
-    	extract(obj.destrem, nfe.personDest, 
+    	extract(obj.destRem, nfe.personDest, 
     			["Município", "País", "CNAE Fiscal", "Código de Regime Tributário"], 
     			["city", "country", "cnae", "crt"], 
     			"number");
@@ -142,8 +142,8 @@ export class NfeImporterController {
     		item.product = {};
     		item.product.ncm = {};
     		item.product._cest = {};
-    		item._barcode = {};
-    		item._taxGroup = {};
+    		item.product._barcode = {};
+    		item.product._taxGroup = {};
     		
         	extract(objProd, item.product._cest, 
         			["Código CEST"], 
@@ -173,11 +173,11 @@ export class NfeImporterController {
         			["orig"], 
         			"number");
         	
-        	extract(objProd, item._barcode,
+        	extract(objProd, item.product._barcode,
         			["Código EAN Comercial"],
         			["barcode"]);
         	
-        	extract(objProd, item._taxGroup, 
+        	extract(objProd, item.product._taxGroup, 
         			["Tributação do ICMS", "CST", "CST_"], 
         			["cst_icms", "cst_pis", "cst_cofins"], 
         			"number");
@@ -190,32 +190,19 @@ export class NfeImporterController {
 // Cob
     	nfe.cobs = [];
     	
-    	for (let table of obj.cob) {
-    		if (table.id == "Número-Vencimento-Valor-") {
-    			for (let row of table.rows) {
-            		let cob = {};
-            		cob.type = 14; // 14 – Duplicata Mercantil
-            		cob.account = 2; // 2 - Conta Bancária Principal
-            		cob.number = row[0];
-            		cob.due_date = parseDate(row[1]);
-            		cob.value = parseNumber(row[2]);
-            		nfe.cobs.push(cob);
-    			}
-    		} else if (table.id == "Forma de Pagamento-Valor do Pagamento-Tipo de Integração Pagamento-CNPJ da Credenciadora-Bandeira da operadora-Número de autorização-") {
-    			for (let row of table.rows) {
-            		let cob = {};
-            		cob.type = parseNumber(row[0]);
-            		cob.value = parseNumber(row[1]);
-            		cob.number = row[5];
-            		
-            		if (cob.type == 3) {
-                		cob.account = 2; // 2 - Conta Bancária Principal
-                		cob.due_date = requestNfe.dhemi;
-            		}
-            		
-            		nfe.cobs.push(cob);
-    			}
-    		}
+    	for (let objCob of obj.cob.rows) {
+			const cob = {};
+			nfe.cobs.push(cob);
+			
+        	extract(objCob, cob, 
+        			["Ind. Forma de Pagamento.", "Meio de Pagamento", "Valor do Pagamento"], 
+        			["number", "type", "value"], 
+        			"number");
+			
+			if (cob.type == 3) {
+				cob.account = 2; // 2 - Conta Bancária Principal
+				cob.due_date = requestNfe.dhemi;
+			}
     	}
 //
 		console.log("nfe:", nfe);
@@ -273,104 +260,106 @@ request_nfe :
 		}
 
 		text = text.replace(/<script.*\/script>/g, "");
-		fs.writeFileSync(`/tmp/nfe00.html`, text);
+//		fs.writeFileSync(`/tmp/nfe00.html`, text);
 		text = text.replace(/><div/g, ">\n<div");
-		fs.writeFileSync(`/tmp/nfe01.html`, text);
-		text = text.replace(/<fieldset/g, ">\n\t$&");
-		fs.writeFileSync(`/tmp/nfe02.html`, text);
+//		fs.writeFileSync(`/tmp/nfe01.html`, text);
+		text = text.replace(/<fieldset/g, "\n\t$&");
+//		fs.writeFileSync(`/tmp/nfe02.html`, text);
 		text = text.replace(/<label/g, "\n\t\t$&");
-		fs.writeFileSync(`/tmp/nfe03.html`, text);
+//		fs.writeFileSync(`/tmp/nfe03.html`, text);
 		text = text.replace(/<span>\n +/g, "<span>");
-		fs.writeFileSync(`/tmp/nfe04.html`, text);
+//		fs.writeFileSync(`/tmp/nfe04.html`, text);
 		text = text.replace(/\n +<\/span>/g, "</span>");
-		fs.writeFileSync(`/tmp/nfe05.html`, text);
+//		fs.writeFileSync(`/tmp/nfe05.html`, text);
 		text = text.replace(/<label>\n +/g, "<label>");
-		fs.writeFileSync(`/tmp/nfe06.html`, text);
+//		fs.writeFileSync(`/tmp/nfe06.html`, text);
 		text = text.replace(/\n +<\/label>/g, "</label>");
-		fs.writeFileSync(`/tmp/nfe07.html`, text);
-		text = text.replace(/(\d)\n +/g, "$1 ");
-		fs.writeFileSync(`/tmp/nfe08.html`, text);
-		text = text.replace(/(-|:| )\n +/g, "$1 ");// não está pegando o caso com espaço
-		fs.writeFileSync(`/tmp/nfe09.html`, text);
+//		fs.writeFileSync(`/tmp/nfe07.html`, text);
+		text = text.replace(/(\w)\n +/g, "$1 ");
+//		fs.writeFileSync(`/tmp/nfe08.html`, text);
+		text = text.replace(/\n +(\w)/g, " $1");
+//		fs.writeFileSync(`/tmp/nfe09.html`, text);
+		text = text.replace(/(-|:)\n +/g, "$1 ");// não está pegando o caso com espaço
+//		fs.writeFileSync(`/tmp/nfe10.html`, text);
 		// prod		
 		text = text.replace(/<td class="fixo(-\w+)+"><span/g, "\n\t\t$&");
-		fs.writeFileSync(`/tmp/nfe10.html`, text);
+//		fs.writeFileSync(`/tmp/nfe11.html`, text);
 		text = text.replace(/<table class="toggle box">/g, "\n\t\t$&");
-		fs.writeFileSync(`/tmp/nfe11.html`, text);
+//		fs.writeFileSync(`/tmp/nfe12.html`, text);
+		text = text.replace(/<ul id="botoes_nft">.*<\/ul>/, "");
+//		fs.writeFileSync(`/tmp/nfe13.html`, text);
 		return text;
 	}
     
 	static parseHtml(html) {
-		const parseDiv = (mapOut, div, strLabelIni, strLabelEnd) => {
-			div.split(strLabelIni).forEach((item, index) => {
-				if (index > 0) {
-					const posEndLabel = item.indexOf(strLabelEnd);
-					
-					if (posEndLabel > 0) {
-						let name = item.substring(0, posEndLabel).trim();
-						
-						const posEndValue = item.indexOf("</span>", posEndLabel);
-						
-						if (posEndValue > 0) {
-							const value = item.substring(posEndLabel + strLabelEnd.length, posEndValue).trim();
-							
-							while (mapOut.get(name) != undefined) {
-								name = name + "_";
-							}
-							
-							mapOut.set(name, value);
-						}
-					}
-				}
-			});
-		};
-		
-		const parseTable = div => {
-			let obj = {};
-			obj.id = "";
-			obj.labels = [];
+		const labelToCamelCase = label => label.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\W+/g, "_").replace(/_./g, str => str.substring(1).toUpperCase()).replace(/^\w./g, str => str.toLowerCase());
+
+		const parseCobranca = div => {
+			const obj = {};
 			obj.rows = [];
-			
-			div.split("<tr").forEach((rowTable, indexRow) => {
-				if (indexRow > 0) {
-					if (indexRow == 1) {
-						rowTable.split("<td><label>").forEach((col, indexCol) => {
-							if (indexCol > 0) {
-								let label = col.substring(0, col.indexOf("</label>")).trim();
-								obj.labels.push(label);
-								obj.id = obj.id + label + "-";
-							}
-						});
-					} else {
-						let row = [];
-						
-						rowTable.split("<td><span>").forEach((col, indexCol) => {
-							if (indexCol > 0) {
-								row.push(col.substring(0, col.indexOf("</span>")).trim());
-							}
-						});
-						
-						obj.rows.push(row);
+
+			const tables = div.split("<table");
+			tables.shift();
+
+			if (tables.length >= 2) {
+				const labels = [];
+
+				{
+					const regExp = /<label>(.*)<\/label>/g;
+					let regExpResult;
+
+					while ((regExpResult = regExp.exec(tables[0])) !== null) {
+						let label = regExpResult[1];
+//						label = labelToCamelCase(label);
+						labels.push(label);
 					}
 				}
-			});
+
+				const trList =  tables[1].split(/<tr/);
+				trList.shift();
+
+				for (let tr of trList) {
+					const values = tr.match(/<span>(.*)<\/span><\/td><td style="width:40%"><span>(.*)<\/span><\/td><td style="width:40%"><span>(.*)<\/span>/);
+					values.shift();
+					const element = new Map();
+					obj.rows.push(element);
+
+					if (labels.length == values.length) {
+						for (let i = 0; i < labels.length; i++) {
+							element.set(labels[i], values[i]);
+						}
+					} else {
+						// TODO
+					}
+				}
+			} else {
+				// TODO
+			}
 			
 			return obj;
 		}
 
-		const labelToCamelCase = label => label.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\W+/g, "_").replace(/_./g, str => str.substring(1).toUpperCase());
-
 		const parseFields = text => {
-			const obj = {};
-			const regExp = /<label>(.*)</label><span>(.*)</span>/g;
+			const obj = new Map();
+			const regExp = /<label>(.*)<\/label><span>(.*)<\/span>|<td class="(.*)"><span>(.*)<\/span>/g;
 			let regExpResult;
 
 			while ((regExpResult = regExp.exec(text)) !== null) {
-				const name = labelToCamelCase(regExpResult[0]);
+				let name;
+				let value;
 
-				if (obj[name] == undefined) {
-					const value = regExpResult[1];
-					obj[name] = value.trim();
+				if (regExpResult[1] != undefined) {
+					name = regExpResult[1];
+					value = regExpResult[2];
+				} else {
+					name = regExpResult[3];
+					value = regExpResult[4];
+				}
+
+//				name = labelToCamelCase(name);
+
+				if (obj.get(name) == undefined) {
+					obj.set(name, value.trim());
 				} else {
 					console.error(`TODO`);
 				}
@@ -382,8 +371,8 @@ request_nfe :
 		const parseFieldSets = text => {
 			const ret = {};
 
-			const splits = text.split(/<fieldset><legend>(.*)<\/legend>|<fieldset><legend class="titulo-aba">(.*)<\/legend>/);
-			recs.shift();
+			const splits = text.split(/<fieldset><legend(?: class="titulo-aba")?>(.*)<\/legend>/);
+			splits.shift();
 
 			for (let i = 0; i < (splits.length-1); i++) {
 				const sectionName = labelToCamelCase(splits[i]);
@@ -398,34 +387,32 @@ request_nfe :
 			return ret;
 		}
 		
-		const recs = html.split(/<div id="(\w+)" class="GeralXslt">|<div id="(\w+)" op="\d" class="GeralXslt"|<div( )class="GeralXslt">/);
+		const recs = html.split(/<div id="(\w+)" (?:op="\d" )?class="GeralXslt"|<div class="GeralXslt">/);
 		recs.shift();
 		const obj = {};
 
 		for (let i = 0; i < (recs.length-1); i++) {
-			const name = labelToCamelCase(recs[i]);
+			let name;
+
+			if (recs[i] != undefined)
+				name = labelToCamelCase(recs[i]);
+			else
+				name = "header";
+
 			const rec = recs[++i];
 
 			if (obj[name] == undefined) {
 				if (name == "prod") {
 					obj.prod = [];
+					const recsProduct = rec.split(/<table class="toggle box">/);
+					recsProduct.shift();
 					
-					rec.split(/<td class="fixo-prod-serv-numero"><span>/).forEach((divProd, indexDivProd) => {
-						if (indexDivProd > 0) {
-							const prod = new Map();
-							parseDiv(prod, divProd, "<label>", "</label><span>");
-							parseDiv(prod, divProd, "<td class=\"", "\"><span>");
-							obj.prod.push(prod);
-						}
+					recsProduct.forEach((divProd, indexDivProd) => {
+						divProd = "<fieldset><legend>itemProduct</legend></fieldset>" + divProd;
+						obj.prod.push(parseFieldSets(divProd));
 					});
 				} else  if (name == "cobranca") {
-					obj.cob = [];
-					
-					rec.split("<table class=\"box\">").forEach((table, tableIndex) => {
-						if (tableIndex > 0) {
-							obj.cob.push(parseTable(table));
-						}
-					});
+					obj.cob = parseCobranca(rec);
 				} else {
 					obj[name] = parseFieldSets(rec);
 				}
