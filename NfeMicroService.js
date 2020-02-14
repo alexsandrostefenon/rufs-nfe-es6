@@ -59,16 +59,30 @@ class NfeMicroService extends MicroServiceServer {
 
 NfeMicroService.checkStandalone();
 /*
-const chaveNFe = "43191293209765016110653110002321001004193718";
-const text = fs.readFileSync(`nfe_${chaveNFe}.html`, "utf8");
-const html = NfeImporterController.formatHtml(text);
-fs.writeFileSync(`nfe_${chaveNFe}_formated.html`, html);
-const data = NfeImporterController.parseHtml(html);
+import {MicroServiceClient} from "../rufs-base-es6/MicroServiceClient.js";
+import util from "util";
 
-fs.writeFileSync(`nfe_${chaveNFe}_formated.json`, JSON.stringify(data, (k, v) => v instanceof(Map) ? Array.from(v.keys()) : v, "\t"));
+const setTimeoutPromise = util.promisify(setTimeout);
 
-const nfeImporterController = new NfeImporterController();
-nfeImporterController.exportNfe(data);
+setTimeoutPromise(5000).then(() => {
+	const rufsClient = new MicroServiceClient({"port":8090, "appName":"crud", "userId":"nfe_guest", "password":"123456"});
+
+	rufsClient.login().then(() => {
+		const chaveNFe = "43191293209765016110653110002321001004193718";
+		const text = fs.readFileSync(`nfe_${chaveNFe}.html`, "utf8");
+		const html = NfeImporterController.formatHtml(text);
+		fs.writeFileSync(`nfe_${chaveNFe}_formated.html`, html);
+		const nfeMap = NfeImporterController.parseHtml(html);
+		fs.writeFileSync(`nfe_${chaveNFe}_formated.json`, JSON.stringify(nfeMap, (k, v) => v instanceof(Map) ? Array.from(v.keys()) : v, "\t"));
+		const nfeImporterController = new NfeImporterController();
+		const nfeObj = nfeImporterController.exportNfe(nfeMap);
+		fs.writeFileSync(`nfe_${chaveNFe}_obj.json`, JSON.stringify(nfeObj, null, "\t"));
+		const nfe = nfeImporterController.merge(rufsClient, nfeObj);
+		fs.writeFileSync(`nfe_${chaveNFe}_merged.json`, JSON.stringify(nfe, null, "\t"));
+	}).catch(err => {
+		console.error(err);
+	});
+});
 */
 
 export {NfeMicroService};

@@ -36,7 +36,6 @@ su -c su postgres;
 
 export PGDATABASE=postgres;
 psql -c "CREATE USER development WITH CREATEDB LOGIN PASSWORD '123456'";
-psql -c 'CREATE DATABASE rufs_nfe WITH OWNER development';
 psql -c 'CREATE DATABASE rufs_nfe_development WITH OWNER development';
 
 exit;
@@ -47,17 +46,20 @@ Import default configuration data with commands :
 
 export PGHOST=localhost;
 export PPORT=5432;
-export PGDATABASE=rufs_nfe;
 export PGUSER=development;
 export PGPASSWORD=123456;
+export PGDATABASE=rufs_nfe;
 
-Create Rufs basic schema with command :
+psql "$PGDATABASE"_development -c "DROP DATABASE IF EXISTS $PGDATABASE;" &&
+psql "$PGDATABASE"_development -c "CREATE DATABASE $PGDATABASE;" &&
 
-`nodejs --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-base-es6/RufsServiceMicroService.js --port=8082;`
+#Create Rufs basic schema with command :
 
-Create NFE schema :
+nodejs --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-base-es6/RufsServiceMicroService.js --sync-and-exit;
 
-psql < ./rufs-nfe-es6/sql/database_schema.sql;
+#Create NFE schema :
+
+psql < ./rufs-nfe-es6/sql/database_schema.sql &&
 psql < ./rufs-nfe-es6/sql/database_first_data.sql;
 
 Add entries 
@@ -68,9 +70,9 @@ expose database information :
 
 export PGHOST=localhost;
 export PPORT=5432;
-export PGDATABASE=rufs_nfe;
 export PGUSER=development;
 export PGPASSWORD=123456;
+export PGDATABASE=rufs_nfe;
 
 Execute rufs-proxy to load and start microservices :
 
