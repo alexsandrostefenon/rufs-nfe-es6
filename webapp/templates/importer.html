@@ -22,7 +22,7 @@
 
 <video id="qr-video" ng-if="vm.videoInput != 'File'"></video>
 
-<input id="input-file" ng-show="vm.videoInput == 'File'" type="file"></input>
+<input id="input-file" ng-show="vm.videoInput == 'File'" type="file" accept="image/*" capture="camera"></input>
 <canvas id="out-canvas" width="320" height="240"></canvas>
 
 <pre>{{vm.result}}</pre>

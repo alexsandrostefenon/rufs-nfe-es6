@@ -32,7 +32,7 @@ sudo su postgres;
 
 or
 
-su -c su postgres;
+su -c "su postgres";
 
 export PGDATABASE=postgres;
 psql -c "CREATE USER development WITH CREATEDB LOGIN PASSWORD '123456'";
@@ -55,6 +55,10 @@ psql "$PGDATABASE"_development -c "CREATE DATABASE $PGDATABASE;" &&
 
 #Create Rufs basic schema with command :
 
+if [ "X$NODE_MODULES_PATH" == "X" ]; then
+	NODE_MODULES_PATH="./";
+fi
+
 nodejs --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-base-es6/RufsServiceMicroService.js --sync-and-exit;
 
 #Create NFE schema :
@@ -74,9 +78,13 @@ export PGUSER=development;
 export PGPASSWORD=123456;
 export PGDATABASE=rufs_nfe;
 
-Execute rufs-proxy to load and start microservices :
+if [ "X$NODE_MODULES_PATH" == "X" ]; then
+	NODE_MODULES_PATH="./";
+fi
 
-`nodejs --inspect --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-crud-es6/proxy.js --add-modules=$PWD/rufs-nfe-es6/NfeMicroService.js;`
+#Execute rufs-proxy to load and start microservices :
+
+nodejs --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-crud-es6/proxy.js --add-modules=$PWD/rufs-nfe-es6/NfeMicroService.js > log.txt &
 
 ## Web application
 

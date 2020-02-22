@@ -1,6 +1,6 @@
 import {CrudController} from "/crud/es6/CrudController.js";
 import {CrudItem} from "/crud/es6/CrudItem.js";
-import {NfeImporterController} from "./NfeImporterController.js";
+import {NfeParser} from "./NfeImporterController.js";
 
 export class RequestController extends CrudController {
 
@@ -169,21 +169,9 @@ export class RequestController extends CrudController {
 		}
 	}
 
-	generateNFE(request) {
-		const ide = {};
-		const crudGroupOwner = {};
-		const nfe = {};
-		nfe.nfeProc = {};
-		nfe.nfeProc.NFe = {};
-		nfe.nfeProc.NFe.infNFe = {};
-		nfe.nfeProc.NFe.infNFe.ide = ide;
-	}
-	
 	update() {
     	return super.update().then(response => {
 	    	this.filterRequestState();
-    		this.generateNFE(response.data);
-//    		this.$scope.$apply();
         	return response;
     	});
 	}
@@ -224,7 +212,6 @@ export class RequestController extends CrudController {
 			this.templateModel = "/nfe/templates/importer.html";
 			this.setValues(params.overwrite);
 			this.listDevices = ["File"];
-			this.nfeImporter = new NfeImporterController();
 			// QRCODE reader Copyright 2011 Lazar Laszlo, http://www.webqr.com
 			qrcode.canvas_qr2 = document.createElement('canvas');
 			qrcode.canvas_qr2.id = "qr-canvas";
@@ -243,18 +230,26 @@ export class RequestController extends CrudController {
 						chaveNFe = response.substr(response.indexOf("?p=")+3, 44);
 					}
 					
-					this.nfeImporter.nfeImport(chaveNFe);
+					NfeParser.load(this.serverConnection, chaveNFe);
 				}
 			};
 
-			this.serverConnection.$q.when(navigator.mediaDevices.enumerateDevices()).then((devices) => {
-			  devices.forEach((device) => {
-				if (device.kind === "videoinput") {
-					this.listDevices.push(device.deviceId);
-					console.log(device);
+			if (navigator.mediaDevices != undefined) {
+				if (navigator.mediaDevices.enumerateDevices != undefined) {
+					navigator.mediaDevices.enumerateDevices().then(devices => {
+					  devices.forEach(device => {
+						if (device.kind === "videoinput") {
+							this.listDevices.push(device.deviceId);
+							console.log(device);
+						}
+					  });
+					});
+				} else {
+				  console.error("enumerateDevices() not supported.");
 				}
-			  });
-			});
+			} else {
+			  console.error("mediaDevices() not supported.");
+			}
 		}
     }
 	
@@ -271,6 +266,7 @@ export class RequestController extends CrudController {
 		let processImage = () => {
 			if (document.getElementById("qr-video") != undefined) {
 				qrcode.qrcontext2.drawImage(video,0,0);
+				console.log(video.videoWidth, video.videoHeight);
 
 				try {
 						qrcode.decode();
@@ -300,9 +296,9 @@ export class RequestController extends CrudController {
     	      		    const base64data = eventReader.target.result;
     	      		    qrcode.decode(base64data);
 						Quagga.decodeSingle({decoder: {readers: ["code_128_reader"]}, src: base64data}, result => {
-						    if (result.codeResult) {
+						    if (result && result.codeResult) {
 						    	console.log(`[RequestController.deviceChange.File] : Quagga:`, result.codeResult.code);
-						    	this.nfeImporter.nfeImport(result.codeResult.code);
+						    	NfeParser.load(this.serverConnection, result.codeResult.code);
 						    }
 						});
     	            };
@@ -311,7 +307,7 @@ export class RequestController extends CrudController {
     	        }
     		};
     	} else {
-    	      let options={'deviceId': {'exact':this.videoInput}, 'facingMode':'environment'};
+    	      let options={'deviceId': {'exact':this.videoInput}, 'facingMode':'environment', width: {ideal: 4096}};
     		  
     		  navigator.mediaDevices.getUserMedia({video: options, audio: false}).then((stream) => {
     			this.play(stream);

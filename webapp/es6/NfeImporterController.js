@@ -1,21 +1,36 @@
 //import fs from "fs";
 
-export class NfeImporterController {
-    
-    nfeImport(chaveNFe) {
+export class NfeParser {
+    // public
+    static load(serverConnection, chaveNFe) {
     	const url = "/nfe/rest/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-COM_2.asp" + "?chaveNFe=" + chaveNFe + "&HML=false&NFCE63968B6";
     	fetch(url).then(response => {
-    		return response.text();
-    	}).then(text => {
-    		this.result = text;
-    		const nfeMap = NfeImporterController.parseHtml(text);
-			const nfeObj = this.exportNfe(nfeMap);
-		}).catch(err => {
+    		return response.json();
+		}).
+		then(json => this.process(serverConnection, chaveNFe, json.data)).
+		catch(err => {
 		  console.log(err);
 		});
 	}
+
+	static async process(serverConnection, chaveNFe, text) {
+		const html = this.formatHtml(text);
+		console.log(html);
+//		fs.writeFileSync(`nfe_${chaveNFe}_formated.html`, html);
+		const nfeMap = this.parseHtml(html);
+//		fs.writeFileSync(`nfe_${chaveNFe}_formated.json`, JSON.stringify(nfeMap, (k, v) => v instanceof(Map) ? Array.from(v.keys()) : v, "\t"));
+		const nfeObj = this.exportNfe(nfeMap);
+//		fs.writeFileSync(`nfe_${chaveNFe}_obj.json`, JSON.stringify(nfeObj, null, "\t"));
+		return this.merge(serverConnection, nfeObj).then(nfe => {
+//			fs.writeFileSync(`nfe_${chaveNFe}_merged.json`, JSON.stringify(nfe, null, "\t"));
+			return nfe;
+		}).catch(err => {
+			console.error(err);
+			throw err;
+		});
+	}
 	
-	async merge(serverConnection, nfe) {
+	static async merge(serverConnection, nfe) {
 		const personEmitente = await serverConnection.services.person.patch(nfe.personEmitente);// cnpj|cpf (\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2})|(\d{3}\.\d{3}\.\d{3}-\d{2})
 		const personDest = await serverConnection.services.person.patch(nfe.personDest);// cnpj|cpf (\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2})|(\d{3}\.\d{3}\.\d{3}-\d{2})
 		nfe.data.type++;
@@ -26,7 +41,7 @@ export class NfeImporterController {
 		nfe.data.personDest = personDest.data.cnpjCpf;
 		const request = await serverConnection.services.request.patch(nfe.data);
 		nfe.data.request = request.data.id;
-		const requestNfe = await serverConnection.services.request.patch(nfe.data);
+		const requestNfe = await serverConnection.services.requestNfe.patch(nfe.data);
 
 		for (let item of nfe.products) {
 			const ncm = await serverConnection.services.camexNcm.patch(item.ncm);
@@ -37,17 +52,23 @@ export class NfeImporterController {
 				await serverConnection.services.confazCest.patch(item.cest);
 			}
 			// antes de correr o risco de cadastrar o produto como novo, verifica se o código de barras já foi cadastrado e portanto já existe o produto que pode estar cadastrado com outro nome
-			{
+			if (item.barcode && item.barcode.number && item.barcode.number.match(/^\d{8,}$/)) {
 				const barcode = await serverConnection.services.barcode.get(item.barcode).catch(err => null);
 
 				if (barcode != null) {
 					item.product.id = barcode.data.product;
 				}
+			} else {
+				delete item.barcode;
 			}
 
 			const product = await serverConnection.services.product.patch(item.product);
-			item.barcode.product = product.data.id;
-			const barcode = await serverConnection.services.barcode.patch(item.barcode);
+
+			if (item.barcode) {
+				item.barcode.product = product.data.id;
+				const barcode = await serverConnection.services.barcode.patch(item.barcode);
+			}
+			
 			const cfop = await serverConnection.services.nfeCfop.patch(item.cfop);
 			item.taxGroup.ncm = ncm.data.id;
 			item.taxGroup.city = personEmitente.data.city;
@@ -60,7 +81,13 @@ export class NfeImporterController {
 
 		await serverConnection.services.account.get({id : 1}).catch(err => serverConnection.services.account.save({person: personDest.data.cnpjCpf, description: "CAIXA"}));
 		await serverConnection.services.account.get({id : 2}).catch(err => serverConnection.services.account.save({person: personDest.data.cnpjCpf, description: "CONTA BANCÁRIA PRINCIPAL"}));
-		await serverConnection.services.account.get({id : 3}).catch(err => serverConnection.services.account.save({person: personDest.data.cnpjCpf, description: "PENDENTE DE DEFINIÇÂO"}));
+		await serverConnection.services.account.get({id : 3}).catch(err => {
+			return serverConnection.services.account.save({person: personDest.data.cnpjCpf, description: "PENDENTE DE DEFINIÇÂO"}).
+			catch(err => {
+				console.log(err);
+				throw err;
+			});
+		});
 
 		const bankAccountTypes = [2, 4, 15];
 
@@ -80,7 +107,7 @@ export class NfeImporterController {
 		}	
 	}
     
-    exportNfe(obj) {
+    static exportNfe(obj) {
     	const getUfCode = str => {
     		let ret = undefined;
     		
@@ -130,7 +157,7 @@ export class NfeImporterController {
 				if (map.has(key) == true) {
 					let str = map.get(key);
 					
-					if (str.length > 0) {
+					if (str.length > 0 && str.replace(/^0+$/, "") != "") {
 						if (typeOut == "number") {
 							ret = parseNumber(str);
 						} else if (typeOut == "date") {
@@ -188,10 +215,10 @@ export class NfeImporterController {
     			["Nome / Razão Social", "Nome Fantasia", "CNPJ", "CPF", "Inscrição Estadual", "Inscrição Municipal", "CEP", "Bairro / Distrito", "Endereço", "Telefone", "Inscrição SUFRAMA"],
     			["name", "fantasy", "cnpjCpf", "cnpjCpf", "ieRg", "im", "zip", "district", "address", "phone", "suframa"]);
     	extract(obj.emitente, person, ["E-mail"], ["email"], "case-sensitive");
-		person.cnpjCpf = person.cnpjCpf.replace(/\D/g,'').padStart(14, "0");
-		person.ieRg = person.ieRg.replace(/\D/g,'').padStart(12, "0");
-		person.zip = person.zip.replace(/\D/g,'').padStart(8, "0");
-		person.phone = person.phone.replace(/\D/g,'').padStart(11, "0");
+		if (person.cnpjCpf) person.cnpjCpf = person.cnpjCpf.replace(/\D/g,'').padStart(14, "0");
+		if (person.ieRg) person.ieRg = person.ieRg.replace(/\D/g,'').padStart(12, "0");
+		if (person.zip) person.zip = person.zip.replace(/\D/g,'').padStart(8, "0");
+		if (person.phone) person.phone = person.phone.replace(/\D/g,'').padStart(11, "0");
     	
     	extract(obj.emitente, person, 
     			["Município", "País", "CNAE Fiscal", "Código de Regime Tributário"], 
@@ -207,9 +234,9 @@ export class NfeImporterController {
     			["Nome / Razão Social", "Nome Fantasia", "CNPJ", "CPF", "Inscrição Estadual", "IM", "CEP", "Bairro / Distrito", "Endereço", "Telefone", "Inscrição SUFRAMA"],
     			["name", "fantasy", "cnpjCpf", "cnpjCpf", "ieRg", "im", "zip", "district", "address", "phone", "suframa"]);
     	extract(obj.destRem, person, ["E-mail"], ["email"], "case-sensitive");
-		person.cnpjCpf = person.cnpjCpf.replace(/\D/g,'').padStart(14, "0");
+		if (person.cnpjCpf) person.cnpjCpf = person.cnpjCpf.replace(/\D/g,'').padStart(14, "0");
 		if (person.ieRg) person.ieRg = person.ieRg.replace(/\D/g,'').padStart(12, "0");
-		person.zip = person.zip.replace(/\D/g,'').padStart(8, "0");
+		if (person.zip) person.zip = person.zip.replace(/\D/g,'').padStart(8, "0");
 		if (person.phone) person.phone = person.phone.replace(/\D/g,'').padStart(11, "0");
     	
     	extract(obj.destRem, person, 
