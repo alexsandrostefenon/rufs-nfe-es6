@@ -59,7 +59,7 @@ if [ "X$NODE_MODULES_PATH" == "X" ]; then
 	NODE_MODULES_PATH="./";
 fi
 
-nodejs --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-base-es6/RufsServiceMicroService.js --sync-and-exit;
+nodejs --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-base-es6/RufsMicroService.js --sync-and-exit;
 
 #Create NFE schema :
 

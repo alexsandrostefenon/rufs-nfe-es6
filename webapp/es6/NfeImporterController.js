@@ -15,14 +15,14 @@ export class NfeParser {
 
 	static async process(serverConnection, chaveNFe, text) {
 		const html = this.formatHtml(text);
-		console.log(html);
-//		fs.writeFileSync(`nfe_${chaveNFe}_formated.html`, html);
-		const nfeMap = this.parseHtml(html);
-//		fs.writeFileSync(`nfe_${chaveNFe}_formated.json`, JSON.stringify(nfeMap, (k, v) => v instanceof(Map) ? Array.from(v.keys()) : v, "\t"));
-		const nfeObj = this.exportNfe(nfeMap);
-//		fs.writeFileSync(`nfe_${chaveNFe}_obj.json`, JSON.stringify(nfeObj, null, "\t"));
-		return this.merge(serverConnection, nfeObj).then(nfe => {
-//			fs.writeFileSync(`nfe_${chaveNFe}_merged.json`, JSON.stringify(nfe, null, "\t"));
+			console.log(html);
+			if (fs) fs.writeFileSync(`nfe_${chaveNFe}_formated.html`, html);
+			const nfeMap = this.parseHtml(html);
+			if (fs) fs.writeFileSync(`nfe_${chaveNFe}_formated.json`, JSON.stringify(nfeMap, (k, v) => v instanceof(Map) ? Array.from(v.keys()) : v, "\t"));
+			const nfeObj = this.exportNfe(nfeMap);
+			if (fs) fs.writeFileSync(`nfe_${chaveNFe}_obj.json`, JSON.stringify(nfeObj, null, "\t"));
+			return this.merge(serverConnection, nfeObj).then(nfe => {
+			if (fs) fs.writeFileSync(`nfe_${chaveNFe}_merged.json`, JSON.stringify(nfe, null, "\t"));
 			return nfe;
 		}).catch(err => {
 			console.error(err);
