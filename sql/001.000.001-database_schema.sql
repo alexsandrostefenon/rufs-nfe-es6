@@ -171,6 +171,7 @@ CREATE TABLE account (
 	number varchar(20),
 	description varchar(255),
 	PRIMARY KEY(rufs_group_owner,id),
+	unique(person,description),
 	unique(bank,agency,number)
 );
 
