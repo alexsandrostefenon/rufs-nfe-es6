@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "rufs-nfe-es6",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "dependencies": {
     "rufs-crud-es6": "git+https://github.com/alexsandrostefenon/rufs-crud-es6.git"
   }

@@ -2,7 +2,7 @@
   "id": "5ebf3ab3-7a16-4ca5-bc32-95e2ddbf6e1b",
   "version": "2.0",
   "name": "webapp",
-  "url": "http://localhost:8090/crud/",
+  "url": "http://localhost:8080/crud/",
   "tests": [{
     "id": "a634f1aa-1398-4f5e-8b60-14bc2320cbf0",
     "name": "request_buy_new",
@@ -33,12 +33,19 @@
       ],
       "value": ""
     }, {
-      "id": "2d031dfa-658f-4b6e-8b12-47099564cc4d",
+      "id": "34b5faf0-16c4-476d-83b8-9b57e543c961",
       "comment": "",
       "command": "select",
       "target": "id=requestForm-person",
       "targets": [],
-      "value": "index=1"
+      "value": "label=93209765016110 - 0240296389 - WMS SUPERMERCADOS DO BRASIL LTDA"
+    }, {
+      "id": "4a2ecc87-7554-402e-b231-3900e105b616",
+      "comment": "",
+      "command": "select",
+      "target": "id=requestForm-personDest",
+      "targets": [],
+      "value": "label=80803792034 - ALEXSANDRO STEFENON"
     }, {
       "id": "9ba4eda4-76f2-4a55-a783-953def696f57",
       "comment": "",
@@ -68,7 +75,7 @@
         ["xpath=//div[@id='requestForm-state_controls']/select", "xpath:idRelative"],
         ["xpath=//select", "xpath:position"]
       ],
-      "value": "string:Compra - Solicitar Orçamento"
+      "value": "string:Compra - Solicitar Orçamento - estimedIn"
     }, {
       "id": "e97162a7-edce-4ad1-a64b-72c1b58c4054",
       "comment": "",
@@ -214,7 +221,7 @@
       "command": "select",
       "target": "id=requestPaymentForm-type",
       "targets": [],
-      "value": "Dinheiro"
+      "value": "0001 - Dinheiro"
     }, {
       "id": "5b06c194-009b-4ced-92a8-5868cc31ea93",
       "comment": "",
@@ -235,7 +242,7 @@
       "command": "assertSelectedValue",
       "target": "id=requestPaymentForm-account",
       "targets": [],
-      "value": "string:Caixa Interno"
+      "value": "string:80803792034 - ALEXSANDRO STEFENON - Caixa Interno"
     }, {
       "id": "876d0341-3fad-4e4c-8e5c-c490a730a2bb",
       "comment": "",
@@ -289,16 +296,17 @@
       "id": "85e6a828-4cee-4001-802f-7bfe1ad3c0c4",
       "comment": "",
       "command": "assertText",
-      "target": "xpath=//crud-item[2]/crud-table/div/div/table/tbody/tr/td[8]/a",
+      "target": "xpath=(//a[contains(@href, '#!/app/request_payment/view?primaryKey.rufsGroupOwner=2&primaryKey.id=1')])[2]",
       "targets": [
-        ["linkText=-15.92", "linkText"],
-        ["css=#requestPaymentForm-crud-table-body .ng-scope:nth-child(8) > .ng-binding", "css:finder"],
-        ["xpath=//a[contains(text(),'-15.92')]", "xpath:link"],
-        ["xpath=//tbody[@id='requestPaymentForm-crud-table-body']/tr/td[8]/a", "xpath:idRelative"],
-        ["xpath=(//a[contains(@href, '#!/app/request_payment/view?crudGroupOwner=2&request=19&id=12')])[5]", "xpath:href"],
-        ["xpath=//crud-item[2]/crud-table/div/div/table/tbody/tr/td[8]/a", "xpath:position"]
+        ["linkText=15.92", "linkText"],
+        ["css=#requestPaymentForm-crud-table-body .ng-scope:nth-child(3) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'15.92')]", "xpath:link"],
+        ["xpath=//tbody[@id='requestPaymentForm-crud-table-body']/tr/td[3]/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '#!/app/request_payment/view?primaryKey.rufsGroupOwner=2&primaryKey.id=1')])[2]", "xpath:href"],
+        ["xpath=//crud-item[2]/crud-table/div/div/table/tbody/tr/td[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'15.92')]", "xpath:innerText"]
       ],
-      "value": "-15.92"
+      "value": "15.92"
     }]
   }, {
     "id": "459c824d-1825-4183-90db-145872eac86e",
@@ -314,7 +322,35 @@
       "id": "4c6f8a7a-a794-4753-b015-15efd5d08096",
       "comment": "",
       "command": "run",
-      "target": "create_person",
+      "target": "create_person_provider",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "0b340ab8-d95a-4756-a474-1b13b5279f38",
+      "comment": "",
+      "command": "run",
+      "target": "create_person_client",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8d40829b-2715-4653-a253-9fac0bdad5c5",
+      "comment": "",
+      "command": "run",
+      "target": "create_person_bank",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2d93fea6-0e69-4b74-96cc-e0a93444705f",
+      "comment": "",
+      "command": "run",
+      "target": "create_account_money",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6e802ff6-6b34-48e7-bcc7-da28b15db633",
+      "comment": "",
+      "command": "run",
+      "target": "create_account_bank",
       "targets": [],
       "value": ""
     }, {
@@ -323,86 +359,6 @@
       "command": "run",
       "target": "create_product",
       "targets": [],
-      "value": ""
-    }, {
-      "id": "49dab0c4-67d7-4054-9410-c22075f501f8",
-      "comment": "",
-      "command": "clickAt",
-      "target": "id=single-button-form",
-      "targets": [],
-      "value": "37,16"
-    }, {
-      "id": "2eed6924-38a2-4a60-9035-0090cd600c65",
-      "comment": "",
-      "command": "clickAt",
-      "target": "xpath=//a[contains(text(),'Contas')]",
-      "targets": [],
-      "value": "42,11"
-    }, {
-      "id": "5a1af936-b91c-4460-859b-bd32baf7777f",
-      "comment": "",
-      "command": "clickAt",
-      "target": "id=accountForm-create",
-      "targets": [],
-      "value": "55,12"
-    }, {
-      "id": "54f696b8-22d4-4305-83b1-8a8f935edb15",
-      "comment": "",
-      "command": "type",
-      "target": "id=accountForm-description",
-      "targets": [],
-      "value": "Caixa Interno"
-    }, {
-      "id": "bb4f7873-2bdd-4b63-98f2-2f21a61aab88",
-      "comment": "",
-      "command": "clickAt",
-      "target": "id=accountForm-save",
-      "targets": [],
-      "value": "-331,-401"
-    }, {
-      "id": "b8acc6df-d7ef-4fa7-96c2-100a65763143",
-      "comment": "",
-      "command": "assertElementNotPresent",
-      "target": "id=http-error",
-      "targets": [
-        ["css=strong.ng-binding", "css"],
-        ["css=#http-error > .ng-binding", "css:finder"],
-        ["xpath=//div[@id='http-error']/strong", "xpath:idRelative"],
-        ["xpath=//strong", "xpath:position"]
-      ],
-      "value": ""
-    }, {
-      "id": "185de433-6c41-4d7a-9acc-e6f27112cbbb",
-      "comment": "",
-      "command": "clickAt",
-      "target": "id=accountForm-create",
-      "targets": [],
-      "value": "46,20"
-    }, {
-      "id": "03189605-d9fe-4b9c-b41c-1f58ec58c6bf",
-      "comment": "",
-      "command": "type",
-      "target": "id=accountForm-description",
-      "targets": [],
-      "value": "Conta Bancária Principal"
-    }, {
-      "id": "66aff120-ed70-42e5-9614-e5a1eae89b92",
-      "comment": "",
-      "command": "clickAt",
-      "target": "id=accountForm-save",
-      "targets": [],
-      "value": "60,17"
-    }, {
-      "id": "08f4a4af-5428-4f74-ae03-31cf109191c2",
-      "comment": "",
-      "command": "assertElementNotPresent",
-      "target": "id=http-error",
-      "targets": [
-        ["css=strong.ng-binding", "css"],
-        ["css=#http-error > .ng-binding", "css:finder"],
-        ["xpath=//div[@id='http-error']/strong", "xpath:idRelative"],
-        ["xpath=//strong", "xpath:position"]
-      ],
       "value": ""
     }]
   }, {
@@ -416,30 +372,34 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "f73fa8a1-9ad6-4d7b-b445-a431325b782f",
-      "comment": "",
-      "command": "clickAt",
-      "target": "id=single-button-admin",
-      "targets": [],
-      "value": "34,26"
-    }, {
-      "id": "fa280e29-15d6-4ab1-8404-e4c89d57218b",
-      "comment": "",
-      "command": "clickAt",
-      "target": "xpath=//a[contains(text(),'Crud User')]",
-      "targets": [],
-      "value": "37,8"
-    }, {
       "id": "2d7f0b0e-ac26-498f-8145-2f81f8fe57f2",
       "comment": "",
       "command": "click",
-      "target": "xpath=//a[contains(@href, '#!/app/crud_user/edit?primaryKey=%7B%22id%22%3A2%7D')]",
+      "target": "xpath=//a[contains(@href, '#!/app/rufs_user/view?primaryKey.id=2')]",
       "targets": [
-        ["css=.ng-scope:nth-child(2) > td > .ng-scope:nth-child(1)", "css:finder"],
-        ["xpath=(//a[contains(text(),'Edit')])[2]", "xpath:link"],
-        ["xpath=//tbody[@id='crudUserForm-crud-table-body']/tr[2]/td/a", "xpath:idRelative"],
-        ["xpath=//a[contains(@href, '#!/app/crud_user/edit?primaryKey=%7B%22id%22%3A2%7D')]", "xpath:href"],
+        ["css=.ng-scope:nth-child(2) > td:nth-child(1) > .ng-binding", "css:finder"],
+        ["xpath=(//a[contains(text(),'View')])[2]", "xpath:link"],
+        ["xpath=//tbody[@id='rufsUserForm-crud-table-body']/tr[2]/td/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/rufs_user/view?primaryKey.id=2')]", "xpath:href"],
         ["xpath=//tr[2]/td/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a1e80a65-d4ac-4bff-b603-d0855964967a",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//a[contains(@href, '#!/app/rufs_user/edit?primaryKey.id=2')]",
+      "targets": [
+        ["id=rufsUserForm-update", "id"],
+        ["linkText=Edit", "linkText"],
+        ["name=update", "name"],
+        ["css=#rufsUserForm-update", "css:finder"],
+        ["xpath=//a[contains(text(),'Edit')]", "xpath:link"],
+        ["xpath=//a[@id='rufsUserForm-update']", "xpath:attributes"],
+        ["xpath=//form[@id='rufsUserForm']/div[2]/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/rufs_user/edit?primaryKey.id=2')]", "xpath:href"],
+        ["xpath=//div[2]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,' Edit')]", "xpath:innerText"]
       ],
       "value": ""
     }, {
@@ -658,15 +618,33 @@
       ],
       "value": "31,13"
     }, {
+      "id": "0e9fcc52-8aef-4d94-bb13-736a23ba0b34",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//a[contains(@href, '#!/app/account/view?primaryKey.rufsGroupOwner=2&primaryKey.id=2')]",
+      "targets": [
+        ["linkText=View", "linkText"],
+        ["css=.ng-scope:nth-child(1) > td:nth-child(1) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'View')]", "xpath:link"],
+        ["xpath=//tbody[@id='accountForm-crud-table-body']/tr/td/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/account/view?primaryKey.rufsGroupOwner=2&primaryKey.id=2')]", "xpath:href"],
+        ["xpath=//td/a", "xpath:position"],
+        ["xpath=//a[contains(.,' View')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
       "id": "bd6912d4-0634-4a59-8431-451f6273a27a",
       "comment": "",
       "command": "clickAt",
-      "target": "xpath=(//a[contains(text(),'Delete')])[2]",
+      "target": "name=delete",
       "targets": [
-        ["xpath=(//a[contains(text(),'Delete')])[2]", "xpath:link"],
-        ["xpath=//tbody[@id='accountForm-crud-table-body']/tr[2]/td/a[2]", "xpath:idRelative"],
-        ["xpath=(//a[contains(@href, '')])[19]", "xpath:href"],
-        ["xpath=//tr[2]/td/a[2]", "xpath:position"]
+        ["id=accountForm-delete", "id"],
+        ["name=delete", "name"],
+        ["css=#accountForm-delete", "css:finder"],
+        ["xpath=//button[@id='accountForm-delete']", "xpath:attributes"],
+        ["xpath=//form[@id='accountForm']/div[2]/div/button[2]", "xpath:idRelative"],
+        ["xpath=//button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,' Delete')]", "xpath:innerText"]
       ],
       "value": "39,8"
     }, {
@@ -682,16 +660,33 @@
       ],
       "value": ""
     }, {
+      "id": "eb4c954f-9f56-477a-870c-29b6ccdeb509",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//a[contains(@href, '#!/app/account/view?primaryKey.rufsGroupOwner=2&primaryKey.id=1')]",
+      "targets": [
+        ["linkText=View", "linkText"],
+        ["css=td:nth-child(1) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'View')]", "xpath:link"],
+        ["xpath=//tbody[@id='accountForm-crud-table-body']/tr/td/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/account/view?primaryKey.rufsGroupOwner=2&primaryKey.id=1')]", "xpath:href"],
+        ["xpath=//td/a", "xpath:position"],
+        ["xpath=//a[contains(.,' View')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
       "id": "9a83e393-30bd-4ca9-a26c-bd0ea7d9f4ca",
       "comment": "",
       "command": "clickAt",
-      "target": "linkText=Delete",
+      "target": "name=delete",
       "targets": [
-        ["linkText=Delete", "linkText"],
-        ["xpath=//a[contains(text(),'Delete')]", "xpath:link"],
-        ["xpath=//tbody[@id='accountForm-crud-table-body']/tr/td/a[2]", "xpath:idRelative"],
-        ["xpath=(//a[contains(@href, '')])[13]", "xpath:href"],
-        ["xpath=//a[2]", "xpath:position"]
+        ["id=accountForm-delete", "id"],
+        ["name=delete", "name"],
+        ["css=#accountForm-delete", "css:finder"],
+        ["xpath=//button[@id='accountForm-delete']", "xpath:attributes"],
+        ["xpath=//form[@id='accountForm']/div[2]/div/button[2]", "xpath:idRelative"],
+        ["xpath=//button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,' Delete')]", "xpath:innerText"]
       ],
       "value": "39,1"
     }, {
@@ -731,18 +726,116 @@
       ],
       "value": "41,16"
     }, {
-      "id": "a4ea89bb-5920-4429-ab6a-7a37587baf8d",
+      "id": "67111833-174f-426f-96ee-4b2722ff6dc0",
       "comment": "",
       "command": "clickAt",
-      "target": "linkText=Delete",
+      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=93209765016110')]",
       "targets": [
-        ["linkText=Delete", "linkText"],
-        ["xpath=//a[contains(text(),'Delete')]", "xpath:link"],
-        ["xpath=//tbody[@id='personForm-crud-table-body']/tr/td/a[2]", "xpath:idRelative"],
-        ["xpath=(//a[contains(@href, '')])[13]", "xpath:href"],
-        ["xpath=//a[2]", "xpath:position"]
+        ["linkText=View", "linkText"],
+        ["css=td:nth-child(1) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'View')]", "xpath:link"],
+        ["xpath=//tbody[@id='personForm-crud-table-body']/tr/td/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=93209765016110')]", "xpath:href"],
+        ["xpath=//td/a", "xpath:position"],
+        ["xpath=//a[contains(.,' View')]", "xpath:innerText"]
       ],
-      "value": "44,4"
+      "value": ""
+    }, {
+      "id": "5d17bb44-97bd-4251-b9c0-1662a2fda63b",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=personForm-delete",
+      "targets": [
+        ["id=personForm-delete", "id"],
+        ["name=delete", "name"],
+        ["css=#personForm-delete", "css:finder"],
+        ["xpath=//button[@id='personForm-delete']", "xpath:attributes"],
+        ["xpath=//form[@id='personForm']/div[2]/div/button[2]", "xpath:idRelative"],
+        ["xpath=//button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,' Delete')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "92a3b14a-913d-4bfc-9359-cc86b42a95f5",
+      "comment": "",
+      "command": "//assertElementNotPresent",
+      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=93209765016110')]",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4f9b2f1f-a223-4c57-b9ee-057351aec9e8",
+      "comment": "",
+      "command": "clickAt",
+      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=80803792034+++')]",
+      "targets": [
+        ["linkText=View", "linkText"],
+        ["css=td:nth-child(1) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'View')]", "xpath:link"],
+        ["xpath=//tbody[@id='personForm-crud-table-body']/tr/td/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=80803892034+++')]", "xpath:href"],
+        ["xpath=//td/a", "xpath:position"],
+        ["xpath=//a[contains(.,' View')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "9223cbd7-14e1-44c6-b7a0-b6c1f9449e2d",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=personForm-delete",
+      "targets": [
+        ["id=personForm-delete", "id"],
+        ["name=delete", "name"],
+        ["css=#personForm-delete", "css:finder"],
+        ["xpath=//button[@id='personForm-delete']", "xpath:attributes"],
+        ["xpath=//form[@id='personForm']/div[2]/div/button[2]", "xpath:idRelative"],
+        ["xpath=//button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,' Delete')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "27999a6f-6ba9-4b10-856a-30f77ff17ab4",
+      "comment": "",
+      "command": "//assertElementNotPresent",
+      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=80803792034+++')]",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9960881e-93c9-41bc-817f-8f8d0fff568a",
+      "comment": "",
+      "command": "clickAt",
+      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=60701190000104')]",
+      "targets": [
+        ["linkText=View", "linkText"],
+        ["css=td:nth-child(1) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'View')]", "xpath:link"],
+        ["xpath=//tbody[@id='personForm-crud-table-body']/tr/td/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=93209765016110')]", "xpath:href"],
+        ["xpath=//td/a", "xpath:position"],
+        ["xpath=//a[contains(.,' View')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "90062dc9-f073-4474-81eb-82b09003d9c5",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=personForm-delete",
+      "targets": [
+        ["id=personForm-delete", "id"],
+        ["name=delete", "name"],
+        ["css=#personForm-delete", "css:finder"],
+        ["xpath=//button[@id='personForm-delete']", "xpath:attributes"],
+        ["xpath=//form[@id='personForm']/div[2]/div/button[2]", "xpath:idRelative"],
+        ["xpath=//button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,' Delete')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ec7acbf0-41b8-4593-8af0-f5b0ab524d57",
+      "comment": "",
+      "command": "//assertElementNotPresent",
+      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=60701190000104')]",
+      "targets": [],
+      "value": ""
     }, {
       "id": "75244915-bd63-4fb1-9f6c-aa255ecbf1fd",
       "comment": "",
@@ -780,18 +873,35 @@
       ],
       "value": "36,11"
     }, {
-      "id": "197b7151-9d02-46c2-9150-1f6dd41a14ad",
+      "id": "9a559199-0b48-4d4e-a18c-48f6e8033adb",
       "comment": "",
       "command": "clickAt",
-      "target": "linkText=Delete",
+      "target": "xpath=//a[contains(@href, '#!/app/product/view?primaryKey.id=1')]",
       "targets": [
-        ["linkText=Delete", "linkText"],
-        ["xpath=//a[contains(text(),'Delete')]", "xpath:link"],
-        ["xpath=//tbody[@id='productForm-crud-table-body']/tr/td/a[2]", "xpath:idRelative"],
-        ["xpath=(//a[contains(@href, '')])[13]", "xpath:href"],
-        ["xpath=//a[2]", "xpath:position"]
+        ["linkText=View", "linkText"],
+        ["css=td:nth-child(1) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'View')]", "xpath:link"],
+        ["xpath=//tbody[@id='personForm-crud-table-body']/tr/td/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=93209765016110')]", "xpath:href"],
+        ["xpath=//td/a", "xpath:position"],
+        ["xpath=//a[contains(.,' View')]", "xpath:innerText"]
       ],
-      "value": "37,5"
+      "value": ""
+    }, {
+      "id": "c9cf7f45-162f-47e9-aa0c-c338334c2929",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=productForm-delete",
+      "targets": [
+        ["id=personForm-delete", "id"],
+        ["name=delete", "name"],
+        ["css=#personForm-delete", "css:finder"],
+        ["xpath=//button[@id='personForm-delete']", "xpath:attributes"],
+        ["xpath=//form[@id='personForm']/div[2]/div/button[2]", "xpath:idRelative"],
+        ["xpath=//button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,' Delete')]", "xpath:innerText"]
+      ],
+      "value": ""
     }, {
       "id": "fe15869e-e774-4ada-a7b3-bad9931b0d25",
       "comment": "",
@@ -984,34 +1094,126 @@
       "targets": [],
       "value": ""
     }, {
-      "id": "76c9cf2f-ae1d-4296-a45c-0afd6798da14",
+      "id": "d1c6a7fc-287d-4206-acc7-d573d0b597b2",
       "comment": "",
-      "command": "clickAt",
-      "target": "linkText=Edit",
+      "command": "click",
+      "target": "id=single-button-form",
       "targets": [
-        ["linkText=Edit", "linkText"],
-        ["css=a.ng-binding.ng-scope", "css"],
-        ["xpath=//a[contains(text(),'Edit')]", "xpath:link"],
+        ["id=single-button-form", "id"],
+        ["css=#single-button-form", "css:finder"],
+        ["xpath=//button[@id='single-button-form']", "xpath:attributes"],
+        ["xpath=//div[@id='header']/div/div[2]/ul/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[3]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Form')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "20c0fc8b-1efc-48f1-87ed-60fa775270d2",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Requisições",
+      "targets": [
+        ["linkText=Requisições", "linkText"],
+        ["css=.open .ng-scope:nth-child(2) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'Requisições')]", "xpath:link"],
+        ["xpath=//div[@id='header']/div/div[2]/ul/div[3]/ul/li[2]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/request/search')]", "xpath:href"],
+        ["xpath=//div[3]/ul/li[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Requisições')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "54293877-749a-4b07-91d1-d95e181af435",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//a[contains(@href, '#!/app/request/view?primaryKey.rufsGroupOwner=2&primaryKey.id=1')]",
+      "targets": [
+        ["linkText=View", "linkText"],
+        ["css=td:nth-child(1) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'View')]", "xpath:link"],
         ["xpath=//tbody[@id='requestForm-crud-table-body']/tr/td/a", "xpath:idRelative"],
-        ["xpath=//a[contains(@href, '#!/app/request/edit?crudGroupOwner=2&id=6')]", "xpath:href"],
-        ["xpath=//td/a", "xpath:position"]
+        ["xpath=//a[contains(@href, '#!/app/request/view?primaryKey.rufsGroupOwner=2&primaryKey.id=1')]", "xpath:href"],
+        ["xpath=//td/a", "xpath:position"],
+        ["xpath=//a[contains(.,' View')]", "xpath:innerText"]
       ],
-      "value": "22,7"
+      "value": ""
     }, {
-      "id": "eab4bd4f-0468-4a6f-b87e-c1ab1df86a20",
+      "id": "d245a86a-2d19-4739-a5c2-0e97213bf6ad",
       "comment": "",
-      "command": "clickAt",
-      "target": "css=#requestPaymentForm-crud-table-body .ng-binding:nth-child(2)",
+      "command": "click",
+      "target": "xpath=//tbody[@id='requestProductForm-crud-table-body']/tr/td/a",
       "targets": [
-        ["css=#requestPaymentForm-crud-table-body .ng-binding:nth-child(2)", "css:finder"],
-        ["xpath=(//a[contains(text(),'Delete')])[2]", "xpath:link"],
-        ["xpath=//tbody[@id='requestPaymentForm-crud-table-body']/tr/td/a[2]", "xpath:idRelative"],
-        ["xpath=(//a[contains(@href, '')])[82]", "xpath:href"],
-        ["xpath=//crud-item[2]/crud-table/div/div/table/tbody/tr/td/a[2]", "xpath:position"]
+        ["linkText=View", "linkText"],
+        ["css=#requestProductForm-crud-table-body td:nth-child(1) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'View')]", "xpath:link"],
+        ["xpath=//tbody[@id='requestProductForm-crud-table-body']/tr/td/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/request_product/view?primaryKey.rufsGroupOwner=2&primaryKey.id=2')]", "xpath:href"],
+        ["xpath=//td/a", "xpath:position"],
+        ["xpath=//a[contains(.,' View')]", "xpath:innerText"]
       ],
-      "value": "52,8"
+      "value": ""
     }, {
-      "id": "935caf2c-ac89-41f2-a079-9d97dc56d788",
+      "id": "7fe99fdb-763d-4582-8cb6-9373deb4c76b",
+      "comment": "",
+      "command": "click",
+      "target": "id=requestProductForm-delete",
+      "targets": [
+        ["id=requestProductForm-delete", "id"],
+        ["name=delete", "name"],
+        ["css=#requestProductForm-delete", "css:finder"],
+        ["xpath=//button[@id='requestProductForm-delete']", "xpath:attributes"],
+        ["xpath=//form[@id='requestProductForm']/div[2]/div/button[2]", "xpath:idRelative"],
+        ["xpath=//button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,' Delete')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "856d4561-ccd5-4bc8-9ff6-df6cca1549ce",
+      "comment": "",
+      "command": "assertElementNotPresent",
+      "target": "linkText=REFRIGERANTE COCA COLA ZERO 2 LITROS - 22021000 - AGUA INCLMINERAL/GASEIFADICIONACUCAR,AROMATIZADA,E - 0000 - Nacional, exceto as indicadas nos códigos de 3 a 5",
+      "targets": [
+        ["linkText=REFRIGERANTE COCA COLA ZERO 2 LITROS - 22021000 - AGUA INCLMINERAL/GASEIFADICIONACUCAR,AROMATIZADA,E - 0000 - Nacional, exceto as indicadas nos códigos de 3 a 5", "linkText"],
+        ["css=#requestProductForm-crud-table-body .ng-scope:nth-child(2) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'REFRIGERANTE COCA COLA ZERO 2 LITROS - 22021000 - AGUA INCLMINERAL/GASEIFADICIONACUCAR,AROMATIZADA,E - 0000 - Nacional, exceto as indicadas nos códigos de 3 a 5')]", "xpath:link"],
+        ["xpath=//tbody[@id='requestProductForm-crud-table-body']/tr/td[2]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/product/view?primaryKey.id=1')]", "xpath:href"],
+        ["xpath=//td[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'REFRIGERANTE COCA COLA ZERO 2 LITROS - 22021000 - AGUA INCLMINERAL/GASEIFADICIONACUCAR,AROMATIZADA,E - 0000 - Nacional, exceto as indicadas nos códigos de 3 a 5')]", "xpath:innerText"]
+      ],
+      "value": "41,8"
+    }, {
+      "id": "94632626-2dde-42e1-b347-3a9d40c509b2",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//tbody[@id='requestPaymentForm-crud-table-body']/tr/td/a",
+      "targets": [
+        ["linkText=View", "linkText"],
+        ["css=td:nth-child(1) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'View')]", "xpath:link"],
+        ["xpath=//tbody[@id='requestPaymentForm-crud-table-body']/tr/td/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/request_payment/view?primaryKey.rufsGroupOwner=2&primaryKey.id=1')]", "xpath:href"],
+        ["xpath=//td/a", "xpath:position"],
+        ["xpath=//a[contains(.,' View')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "18e8e342-9627-4759-8c46-cb97d847eb6f",
+      "comment": "",
+      "command": "click",
+      "target": "id=requestPaymentForm-delete",
+      "targets": [
+        ["id=requestPaymentForm-delete", "id"],
+        ["name=delete", "name"],
+        ["css=#requestPaymentForm-delete", "css:finder"],
+        ["xpath=//button[@id='requestPaymentForm-delete']", "xpath:attributes"],
+        ["xpath=//form[@id='requestPaymentForm']/div[2]/div/button[4]", "xpath:idRelative"],
+        ["xpath=//button[4]", "xpath:position"],
+        ["xpath=//button[contains(.,' Delete')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "120bd78e-fd0d-4f97-964f-51b87019c380",
       "comment": "",
       "command": "assertElementNotPresent",
       "target": "id=http-error",
@@ -1023,30 +1225,18 @@
       ],
       "value": ""
     }, {
-      "id": "d245a86a-2d19-4739-a5c2-0e97213bf6ad",
-      "comment": "",
-      "command": "clickAt",
-      "target": "css=#requestProductForm-crud-table-body .ng-binding:nth-child(2)",
-      "targets": [
-        ["linkText=Delete", "linkText"],
-        ["css=#requestProductForm-crud-table-body .ng-binding:nth-child(2)", "css:finder"],
-        ["xpath=//a[contains(text(),'Delete')]", "xpath:link"],
-        ["xpath=//tbody[@id='requestProductForm-crud-table-body']/tr/td/a[2]", "xpath:idRelative"],
-        ["xpath=(//a[contains(@href, '')])[47]", "xpath:href"],
-        ["xpath=//td/a[2]", "xpath:position"],
-        ["xpath=//a[contains(.,' Delete')]", "xpath:innerText"]
-      ],
-      "value": "41,8"
-    }, {
-      "id": "120bd78e-fd0d-4f97-964f-51b87019c380",
+      "id": "e108ce7c-468d-41c5-88e1-dcbd36c40dc3",
       "comment": "",
       "command": "assertElementNotPresent",
-      "target": "id=http-error",
+      "target": "linkText=80803792034 - ALEXSANDRO STEFENON - Caixa Interno",
       "targets": [
-        ["css=strong.ng-binding", "css"],
-        ["css=#http-error > .ng-binding", "css:finder"],
-        ["xpath=//div[@id='http-error']/strong", "xpath:idRelative"],
-        ["xpath=//strong", "xpath:position"]
+        ["linkText=80803792034 - ALEXSANDRO STEFENON - Caixa Interno", "linkText"],
+        ["css=.ng-scope:nth-child(1) > .ng-scope:nth-child(4) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'80803792034 - ALEXSANDRO STEFENON - Caixa Interno')]", "xpath:link"],
+        ["xpath=//tbody[@id='requestPaymentForm-crud-table-body']/tr/td[4]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/account/view?primaryKey.rufsGroupOwner=2&primaryKey.id=1')]", "xpath:href"],
+        ["xpath=//td[4]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'80803792034 - ALEXSANDRO STEFENON - Caixa Interno')]", "xpath:innerText"]
       ],
       "value": ""
     }, {
@@ -1130,7 +1320,7 @@
     }]
   }, {
     "id": "b77d46ed-2a97-4a13-a38e-cfab228e0b2a",
-    "name": "create_person",
+    "name": "create_person_provider",
     "commands": [{
       "id": "b2f141f5-e07f-4b24-88a8-4058e66b74c0",
       "comment": "",
@@ -1153,19 +1343,19 @@
       "targets": [],
       "value": "35,21"
     }, {
-      "id": "f268ae28-e99b-4325-84d0-17da5e552388",
-      "comment": "",
-      "command": "type",
-      "target": "id=personForm-name",
-      "targets": [],
-      "value": "WMS SUPERMERCADOS DO BRASIL LTDA"
-    }, {
       "id": "9390572d-411a-439e-ba60-85b6b5c9606d",
       "comment": "",
       "command": "type",
       "target": "id=personForm-cnpjCpf",
       "targets": [],
       "value": "93209765016110"
+    }, {
+      "id": "f268ae28-e99b-4325-84d0-17da5e552388",
+      "comment": "",
+      "command": "type",
+      "target": "id=personForm-name",
+      "targets": [],
+      "value": "WMS SUPERMERCADOS DO BRASIL LTDA"
     }, {
       "id": "528bb4c2-dec5-481a-95f1-bbee0f00972e",
       "comment": "",
@@ -1186,21 +1376,21 @@
       "command": "type",
       "target": "id=personForm-zip",
       "targets": [],
-      "value": "92310-001"
+      "value": "92310001"
     }, {
       "id": "18a3a55e-c691-4f89-a186-11fef80d26cb",
       "comment": "",
       "command": "type",
       "target": "id=personForm-country",
       "targets": [],
-      "value": "Brazil"
+      "value": "1058 - Brasil - BR - Brazil"
     }, {
       "id": "047bdbc1-0f89-49bf-8779-9b6b25518c5b",
       "comment": "",
       "command": "type",
       "target": "id=personForm-uf",
       "targets": [],
-      "value": "Rio Grande do Sul"
+      "value": "0043 - Rio Grande do Sul - RS - 1058 - Brasil - BR - Brazil"
     }, {
       "id": "3777e4e9-ba62-4f0a-830b-e0ea18a05101",
       "comment": "",
@@ -1301,17 +1491,17 @@
     }, {
       "id": "d5c4512f-0ecc-4ff8-8f9b-429a725a1046",
       "comment": "",
-      "command": "assertValue",
+      "command": "//assertValue",
       "target": "id=personForm-cnpjCpf",
       "targets": [],
       "value": "93209765016110"
     }, {
       "id": "3123bcb1-6804-4a06-a37b-2507e72718f4",
       "comment": "",
-      "command": "assertValue",
+      "command": "//assertValue",
       "target": "id=personForm-ieRg",
       "targets": [],
-      "value": "0240296389"
+      "value": "0240296389 "
     }, {
       "id": "4ca4a86e-1243-4c80-919b-a16328685bc2",
       "comment": "",
@@ -1325,25 +1515,25 @@
       "command": "assertValue",
       "target": "id=personForm-zip",
       "targets": [],
-      "value": "92310-001"
+      "value": "92310001"
     }, {
       "id": "833eb452-820c-49c5-b5a6-4ae954149554",
       "comment": "",
-      "command": "assertValue",
+      "command": "//assertValue",
       "target": "id=personForm-country",
       "targets": [],
-      "value": "Brazil"
+      "value": "1058 - Brasil - BR - Brazil"
     }, {
       "id": "8356d2d6-6ddb-4679-829c-96d44ce3f82d",
       "comment": "",
-      "command": "assertValue",
+      "command": "//assertValue",
       "target": "id=personForm-uf",
       "targets": [],
-      "value": "Rio Grande do Sul"
+      "value": "0043 - Rio Grande do Sul - RS - 1058 - Brasil - BR - Brazil"
     }, {
       "id": "1e3b1f60-93aa-49c9-98fe-858568ffdeb0",
       "comment": "",
-      "command": "assertValue",
+      "command": "//assertValue",
       "target": "id=personForm-city",
       "targets": [],
       "value": "Canoas - Rio Grande do Sul"
@@ -1394,12 +1584,12 @@
       "targets": [],
       "value": "57,18"
     }, {
-      "id": "3273579d-f4d8-4fb3-a8b7-75c800f3f744",
+      "id": "5b3946c8-746f-4f80-8885-772d0a6389b6",
       "comment": "",
-      "command": "select",
-      "target": "id=productForm-crudGroup",
+      "command": "type",
+      "target": "id=productForm-name",
       "targets": [],
-      "value": "label=Mercado"
+      "value": "REFRIGERANTE COCA COLA ZERO 2 LITROS"
     }, {
       "id": "e615cbc6-47c3-4e64-8aa3-8e9312206f65",
       "comment": "",
@@ -1414,13 +1604,6 @@
       "target": "id=productForm-orig",
       "targets": [],
       "value": "label=0000 - Nacional, exceto as indicadas nos códigos de 3 a 5"
-    }, {
-      "id": "5b3946c8-746f-4f80-8885-772d0a6389b6",
-      "comment": "",
-      "command": "type",
-      "target": "id=productForm-name",
-      "targets": [],
-      "value": "REFRIGERANTE COCA COLA ZERO 2 LITROS"
     }, {
       "id": "874f15cd-bb3c-4017-aa73-e1598e34b272",
       "comment": "",
@@ -1561,6 +1744,376 @@
       ],
       "value": "Unauthorized : Don't match user and password."
     }]
+  }, {
+    "id": "325f67e8-b117-48b8-b422-a9d77474b802",
+    "name": "create_person_client",
+    "commands": [{
+      "id": "adc9af28-756f-4a7b-8772-10d626644275",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=single-button-form",
+      "targets": [],
+      "value": "36,25"
+    }, {
+      "id": "def500f9-8561-4c76-ae9a-f68ceceada82",
+      "comment": "",
+      "command": "clickAt",
+      "target": "xpath=//a[contains(text(),'Clientes e Fornecedores')]",
+      "targets": [],
+      "value": "58,17"
+    }, {
+      "id": "d8dc1da8-335d-4364-83da-11f7051ab928",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=personForm-create",
+      "targets": [],
+      "value": "35,21"
+    }, {
+      "id": "3f334ce7-0736-4460-b661-98c937d734ff",
+      "comment": "",
+      "command": "type",
+      "target": "id=personForm-cnpjCpf",
+      "targets": [],
+      "value": "80803792034"
+    }, {
+      "id": "854e3dc1-afc8-4243-abcb-97aedfe00786",
+      "comment": "",
+      "command": "type",
+      "target": "id=personForm-name",
+      "targets": [],
+      "value": "ALEXSANDRO STEFENON"
+    }, {
+      "id": "af3c3472-c2ea-4073-830b-6527f0d8896c",
+      "comment": "",
+      "command": "type",
+      "target": "id=personForm-country",
+      "targets": [],
+      "value": "Brasil"
+    }, {
+      "id": "e58337bf-7c2e-414f-89ea-2ed394dd1c9f",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=personForm-save",
+      "targets": [],
+      "value": "-331,-1257"
+    }, {
+      "id": "47ef5b44-9578-4e38-b249-a65565d1da48",
+      "comment": "",
+      "command": "assertElementNotPresent",
+      "target": "id=http-error",
+      "targets": [
+        ["css=strong.ng-binding", "css"],
+        ["css=#http-error > .ng-binding", "css:finder"],
+        ["xpath=//div[@id='http-error']/strong", "xpath:idRelative"],
+        ["xpath=//strong", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "09f81d74-f998-4f24-bbef-2fe3694aacad",
+      "comment": "",
+      "command": "click",
+      "target": "id=single-button-form",
+      "targets": [
+        ["id=single-button-form", "id"],
+        ["css=#single-button-form", "css"],
+        ["css=#single-button-form", "css:finder"],
+        ["xpath=//button[@id='single-button-form']", "xpath:attributes"],
+        ["xpath=//div[@id='header']/div/div[2]/ul/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[3]/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "12d1be3a-cd9b-438e-9f11-a6f5c8776ff0",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Clientes e Fornecedores",
+      "targets": [
+        ["linkText=Clientes e Fornecedores", "linkText"],
+        ["css=.dropdown-menu > .ng-scope:nth-child(3) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'Clientes e Fornecedores')]", "xpath:link"],
+        ["xpath=//div[@id='header']/div/div[2]/ul/div[3]/ul/li[3]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/person/search')]", "xpath:href"],
+        ["xpath=//li[3]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ed37c170-9800-4e6d-9b3e-782a2aff4e36",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=80803792034+++')]",
+      "targets": [
+        ["css=.ng-scope:nth-child(2) > td:nth-child(1) > .ng-binding", "css:finder"],
+        ["xpath=(//a[contains(text(),'View')])[2]", "xpath:link"],
+        ["xpath=//tbody[@id='personForm-crud-table-body']/tr[2]/td/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=80803892034+++')]", "xpath:href"],
+        ["xpath=//tr[2]/td/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9d501148-4766-4d50-a707-adb28b6fb9e5",
+      "comment": "",
+      "command": "assertValue",
+      "target": "id=personForm-name",
+      "targets": [],
+      "value": "ALEXSANDRO STEFENON"
+    }, {
+      "id": "91327a4b-f9f5-47f5-a2ea-156aad037952",
+      "comment": "",
+      "command": "//assertValue",
+      "target": "id=personForm-cnpjCpf",
+      "targets": [],
+      "value": "80803792034"
+    }, {
+      "id": "db3b035b-ec8f-4a46-878b-d40b3f89834a",
+      "comment": "",
+      "command": "assertValue",
+      "target": "id=personForm-country",
+      "targets": [],
+      "value": "1058 - Brazil - Brasil - BR"
+    }]
+  }, {
+    "id": "eea20f70-91bb-44c6-a247-b90fbda3ce5c",
+    "name": "create_account_money",
+    "commands": [{
+      "id": "552da46e-2495-41d1-8f84-f83b1337ce8b",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=single-button-form",
+      "targets": [],
+      "value": "37,16"
+    }, {
+      "id": "6de16e78-4c6f-4c3e-a152-86c288cd54e3",
+      "comment": "",
+      "command": "clickAt",
+      "target": "xpath=//a[contains(text(),'Contas')]",
+      "targets": [],
+      "value": "42,11"
+    }, {
+      "id": "1a7bda9a-2a48-49ac-8dee-7f62d82db901",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=accountForm-create",
+      "targets": [],
+      "value": "55,12"
+    }, {
+      "id": "490abbdd-1eba-4978-ac20-a9d7aa9cb45d",
+      "comment": "",
+      "command": "select",
+      "target": "id=accountForm-person",
+      "targets": [],
+      "value": "label=80803792034 - ALEXSANDRO STEFENON"
+    }, {
+      "id": "7cfaa811-5ecc-430e-9c70-5303c55854f3",
+      "comment": "",
+      "command": "type",
+      "target": "id=accountForm-description",
+      "targets": [],
+      "value": "Caixa Interno"
+    }, {
+      "id": "9d9c155b-e9f8-4d86-a6ea-1b95cacb8944",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=accountForm-save",
+      "targets": [],
+      "value": "-331,-401"
+    }, {
+      "id": "c91f80c3-3ec8-4c82-ab70-089b43bb03d0",
+      "comment": "",
+      "command": "assertElementNotPresent",
+      "target": "id=http-error",
+      "targets": [
+        ["css=strong.ng-binding", "css"],
+        ["css=#http-error > .ng-binding", "css:finder"],
+        ["xpath=//div[@id='http-error']/strong", "xpath:idRelative"],
+        ["xpath=//strong", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "49ed59c5-f838-440a-9ece-b074b48036c6",
+    "name": "create_account_bank",
+    "commands": [{
+      "id": "36c96166-8ed4-49b0-b991-519653f8c256",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=single-button-form",
+      "targets": [],
+      "value": "37,16"
+    }, {
+      "id": "970fd0e6-47f9-4cd5-8770-e47f00678688",
+      "comment": "",
+      "command": "clickAt",
+      "target": "xpath=//a[contains(text(),'Contas')]",
+      "targets": [],
+      "value": "42,11"
+    }, {
+      "id": "48eb27c3-af34-4987-9017-a47516f3f054",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=accountForm-create",
+      "targets": [],
+      "value": "55,12"
+    }, {
+      "id": "13134fae-f0ef-48a1-abc4-0f3f5e9aa657",
+      "comment": "",
+      "command": "select",
+      "target": "id=accountForm-person",
+      "targets": [],
+      "value": "60701190000104 - ITAÚ UNIBANCO S.A."
+    }, {
+      "id": "9b17fbb4-2864-48be-8126-655fc6cfc894",
+      "comment": "",
+      "command": "type",
+      "target": "id=accountForm-description",
+      "targets": [],
+      "value": "Conta Bancária Principal"
+    }, {
+      "id": "94d8eb5b-e292-4e3a-9c47-b059b42067c0",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=accountForm-save",
+      "targets": [],
+      "value": "-331,-401"
+    }, {
+      "id": "9c86093a-b7d2-4327-bcf2-c7b6ed766558",
+      "comment": "",
+      "command": "assertElementNotPresent",
+      "target": "id=http-error",
+      "targets": [
+        ["css=strong.ng-binding", "css"],
+        ["css=#http-error > .ng-binding", "css:finder"],
+        ["xpath=//div[@id='http-error']/strong", "xpath:idRelative"],
+        ["xpath=//strong", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "12307d06-6495-42f9-9bfd-64f8a9cc043e",
+    "name": "create_person_bank",
+    "commands": [{
+      "id": "2b2b4fab-8144-4cf4-8282-fd505259307a",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=single-button-form",
+      "targets": [],
+      "value": "36,25"
+    }, {
+      "id": "b1ef0f0e-82c6-41bc-a99f-b0fb2c6c3240",
+      "comment": "",
+      "command": "clickAt",
+      "target": "xpath=//a[contains(text(),'Clientes e Fornecedores')]",
+      "targets": [],
+      "value": "58,17"
+    }, {
+      "id": "265845c2-5ad2-4fe8-89a8-0dfafba44dfb",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=personForm-create",
+      "targets": [],
+      "value": "35,21"
+    }, {
+      "id": "60040dda-aca5-4937-ac07-1aff6946833e",
+      "comment": "",
+      "command": "type",
+      "target": "id=personForm-cnpjCpf",
+      "targets": [],
+      "value": "60701190000104"
+    }, {
+      "id": "8326865e-ae2b-415d-93a0-2c677f3a4bfb",
+      "comment": "",
+      "command": "type",
+      "target": "id=personForm-name",
+      "targets": [],
+      "value": "ITAÚ UNIBANCO S.A."
+    }, {
+      "id": "61133a0a-d27f-409e-a020-1198b5fb1224",
+      "comment": "",
+      "command": "type",
+      "target": "id=personForm-country",
+      "targets": [],
+      "value": "Brasil"
+    }, {
+      "id": "f39cb7a5-f0ff-4943-af37-560664d22ac6",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=personForm-save",
+      "targets": [],
+      "value": "-331,-1257"
+    }, {
+      "id": "fa1b9fbf-e126-47af-9df9-a904c8e5a65b",
+      "comment": "",
+      "command": "assertElementNotPresent",
+      "target": "id=http-error",
+      "targets": [
+        ["css=strong.ng-binding", "css"],
+        ["css=#http-error > .ng-binding", "css:finder"],
+        ["xpath=//div[@id='http-error']/strong", "xpath:idRelative"],
+        ["xpath=//strong", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "69652153-5f51-4f3c-af0f-380ee6bb637d",
+      "comment": "",
+      "command": "click",
+      "target": "id=single-button-form",
+      "targets": [
+        ["id=single-button-form", "id"],
+        ["css=#single-button-form", "css"],
+        ["css=#single-button-form", "css:finder"],
+        ["xpath=//button[@id='single-button-form']", "xpath:attributes"],
+        ["xpath=//div[@id='header']/div/div[2]/ul/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[3]/button", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0d2173b9-cbb8-43a5-9be5-969069fa0040",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Clientes e Fornecedores",
+      "targets": [
+        ["linkText=Clientes e Fornecedores", "linkText"],
+        ["css=.dropdown-menu > .ng-scope:nth-child(3) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'Clientes e Fornecedores')]", "xpath:link"],
+        ["xpath=//div[@id='header']/div/div[2]/ul/div[3]/ul/li[3]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/person/search')]", "xpath:href"],
+        ["xpath=//li[3]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "93462c1c-2f43-456a-9f2d-5b6eebdb799e",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=60701190000104')]",
+      "targets": [
+        ["css=.ng-scope:nth-child(2) > td:nth-child(1) > .ng-binding", "css:finder"],
+        ["xpath=(//a[contains(text(),'View')])[2]", "xpath:link"],
+        ["xpath=//tbody[@id='personForm-crud-table-body']/tr[2]/td/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=80803892034+++')]", "xpath:href"],
+        ["xpath=//tr[2]/td/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "6722bc8c-e313-4d74-8586-97305edfd0ae",
+      "comment": "",
+      "command": "assertValue",
+      "target": "id=personForm-name",
+      "targets": [],
+      "value": "ITAÚ UNIBANCO S.A."
+    }, {
+      "id": "91cabc08-7cde-4ca1-a76d-88ba9e3656de",
+      "comment": "",
+      "command": "assertValue",
+      "target": "id=personForm-cnpjCpf",
+      "targets": [],
+      "value": "60701190000104"
+    }, {
+      "id": "83f18a10-13a1-4958-a52a-552b262d4618",
+      "comment": "",
+      "command": "//assertValue",
+      "target": "id=personForm-country",
+      "targets": [],
+      "value": "1058 - Brazil - Brasil - BR"
+    }]
   }],
   "suites": [{
     "id": "08cb74cc-4ee3-417f-b0eb-05481b3e747a",
@@ -1569,6 +2122,6 @@
     "timeout": 3000,
     "tests": ["bcc3dc1b-75c9-4b9d-af0f-657ccc9dbc56", "459c824d-1825-4183-90db-145872eac86e", "a634f1aa-1398-4f5e-8b60-14bc2320cbf0", "1e9f3675-4bd4-4450-a7a6-c31b52b5e3b8", "eeb9e8f0-7a60-4b9d-9422-86d8f667fe4d", "a4720c93-1155-49f1-940e-1240e2c6adf6"]
   }],
-  "urls": ["https://192.168.2.139:8443/angular-es6-crud-nodejs-j2ee7", "https://192.168.2.139:8443/", "https://localhost:9443/crud", "https://localhost:8443/angular-es6-crud-nodejs-j2ee7", "https://localhost:7443/", "http://localhost:8080/crud", "http://localhost:8090/crud/"],
+  "urls": ["https://192.168.2.139:8443/angular-es6-crud-nodejs-j2ee7", "https://192.168.2.139:8443/", "https://localhost:9443/crud", "https://localhost:8443/angular-es6-crud-nodejs-j2ee7", "https://localhost:7443/", "http://localhost:8080/crud", "http://localhost:8090/crud/", "http://localhost:8080/crud/"],
   "plugins": []
 }

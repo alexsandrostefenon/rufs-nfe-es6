@@ -23,7 +23,7 @@ setTimeoutPromise(86400*1000).then(() => {
 class NfeMicroService extends RufsMicroService {
 
 	constructor(config) {
-		super(config, "nfe");
+		super(config, "nfe", true);
 	}
 
 	onRequest(req, res, next, resource, action) {
@@ -56,6 +56,7 @@ class NfeMicroService extends RufsMicroService {
 			return super.onRequest(req, res, next, resource, action);
 		}
 	}
+
 /*
 INSERT INTO rufs_service (name, title, fields) VALUES ('paymentType', 'Tipo de Pagamento', '{}');
 INSERT INTO rufs_service (name, title, fields) VALUES ('bacenCountry', 'Códigos de Países', '{}');

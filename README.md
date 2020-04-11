@@ -42,49 +42,32 @@ exit;
 
 Note, database "rufs_nfe_development" is only for testing purposes.
 
-Import default configuration data with commands :
+#Create Rufs basic schema with command :
+
+if [ "X$NODE_MODULES_PATH" == "X" ]; then
+	NODE_MODULES_PATH="./rufs-nfe-es6/node_modules/";
+fi
+
+### Run Ecosystem
+
+#Expose database connection configurations :
 
 export PGHOST=localhost;
 export PPORT=5432;
 export PGUSER=development;
 export PGPASSWORD=123456;
 export PGDATABASE=rufs_nfe;
+
+#Only to clean already existent testing data :
 
 psql "$PGDATABASE"_development -c "DROP DATABASE IF EXISTS $PGDATABASE;" &&
 psql "$PGDATABASE"_development -c "CREATE DATABASE $PGDATABASE;" &&
 
-#Create Rufs basic schema with command :
-
-if [ "X$NODE_MODULES_PATH" == "X" ]; then
-	NODE_MODULES_PATH="./";
-fi
-
-nodejs --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-base-es6/RufsMicroService.js --sync-and-exit;
-
-#Create NFE schema :
-
-psql < ./rufs-nfe-es6/sql/database_schema.sql &&
-psql < ./rufs-nfe-es6/sql/database_first_data.sql;
-
-Add entries 
-
-### Run Ecosystem
-
-expose database information :
-
-export PGHOST=localhost;
-export PPORT=5432;
-export PGUSER=development;
-export PGPASSWORD=123456;
-export PGDATABASE=rufs_nfe;
-
-if [ "X$NODE_MODULES_PATH" == "X" ]; then
-	NODE_MODULES_PATH="./";
-fi
-
 #Execute rufs-proxy to load and start microservices :
 
-nodejs --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-crud-es6/proxy.js --add-modules=$PWD/rufs-nfe-es6/NfeMicroService.js > log.txt &
+nodejs --inspect --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-base-es6/proxy.js --add-modules="$PWD/rufs-crud-es6/CrudMicroService.js,$PWD/rufs-nfe-es6/NfeMicroService.js";
+
+> log.txt &
 
 ## Web application
 
