@@ -1,4 +1,5 @@
 //import fs from "fs";
+const fs = undefined;
 
 export class NfeParser {
     // public
@@ -215,10 +216,10 @@ export class NfeParser {
     			["Nome / Razão Social", "Nome Fantasia", "CNPJ", "CPF", "Inscrição Estadual", "Inscrição Municipal", "CEP", "Bairro / Distrito", "Endereço", "Telefone", "Inscrição SUFRAMA"],
     			["name", "fantasy", "cnpjCpf", "cnpjCpf", "ieRg", "im", "zip", "district", "address", "phone", "suframa"]);
     	extract(obj.emitente, person, ["E-mail"], ["email"], "case-sensitive");
-		if (person.cnpjCpf) person.cnpjCpf = person.cnpjCpf.replace(/\D/g,'').padStart(14, "0");
-		if (person.ieRg) person.ieRg = person.ieRg.replace(/\D/g,'').padStart(12, "0");
-		if (person.zip) person.zip = person.zip.replace(/\D/g,'').padStart(8, "0");
-		if (person.phone) person.phone = person.phone.replace(/\D/g,'').padStart(11, "0");
+		if (person.cnpjCpf) person.cnpjCpf = person.cnpjCpf.replace(/\D/g,'');
+		if (person.ieRg) person.ieRg = person.ieRg.replace(/\D/g,'');
+		if (person.zip) person.zip = person.zip.replace(/\D/g,'');
+		if (person.phone) person.phone = person.phone.replace(/\D/g,'');
     	
     	extract(obj.emitente, person, 
     			["Município", "País", "CNAE Fiscal", "Código de Regime Tributário"], 
@@ -234,11 +235,11 @@ export class NfeParser {
     			["Nome / Razão Social", "Nome Fantasia", "CNPJ", "CPF", "Inscrição Estadual", "IM", "CEP", "Bairro / Distrito", "Endereço", "Telefone", "Inscrição SUFRAMA"],
     			["name", "fantasy", "cnpjCpf", "cnpjCpf", "ieRg", "im", "zip", "district", "address", "phone", "suframa"]);
     	extract(obj.destRem, person, ["E-mail"], ["email"], "case-sensitive");
-		if (person.cnpjCpf) person.cnpjCpf = person.cnpjCpf.replace(/\D/g,'').padStart(14, "0");
-		if (person.ieRg) person.ieRg = person.ieRg.replace(/\D/g,'').padStart(12, "0");
-		if (person.zip) person.zip = person.zip.replace(/\D/g,'').padStart(8, "0");
-		if (person.phone) person.phone = person.phone.replace(/\D/g,'').padStart(11, "0");
-    	
+		if (person.cnpjCpf) person.cnpjCpf = person.cnpjCpf.replace(/\D/g,'');
+		if (person.ieRg) person.ieRg = person.ieRg.replace(/\D/g,'');
+		if (person.zip) person.zip = person.zip.replace(/\D/g,'');
+		if (person.phone) person.phone = person.phone.replace(/\D/g,'');
+
     	extract(obj.destRem, person, 
     			["Município", "País", "CNAE Fiscal", "Código de Regime Tributário"], 
     			["city", "country", "cnae", "crt"], 
@@ -478,11 +479,15 @@ request_nfe :
 				}
 
 //				name = labelToCamelCase(name);
+				const valueTrimmed = value.trim();
 
 				if (obj.get(name) == undefined) {
-					obj.set(name, value.trim());
+					obj.set(name, valueTrimmed);
 				} else {
-					console.error(`TODO`);
+					const oldValue = obj.get(name);
+
+					if (oldValue != valueTrimmed)
+						console.error(`[NfeParser.parseHtml.parseFields] : TODO alread maped field ${name}, oldValue=${oldValue}, newValue=${valueTrimmed}`);
 				}
 			}
 

@@ -57,6 +57,11 @@ class NfeMicroService extends RufsMicroService {
 		}
 	}
 
+	static xsd2sql(fileName) {
+		const text = fs.readFileSync(fileName, "utf8");
+		text.replace(/<xs:complexType name="T(\w+)">(.*)<\/xs:complexType>/g, "");
+	}
+
 /*
 INSERT INTO rufs_service (name, title, fields) VALUES ('paymentType', 'Tipo de Pagamento', '{}');
 INSERT INTO rufs_service (name, title, fields) VALUES ('bacenCountry', 'Códigos de Países', '{}');

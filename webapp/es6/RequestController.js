@@ -102,7 +102,7 @@ export class RequestController extends CrudController {
 
 						if (payment.type == 1) {
 							if (accounts.length > 0) {
-								this.crudItemPayment.instance.account = accounts[accounts.length-1].id;
+								this.crudItemPayment.instance.account = accounts[0].id;//accounts[accounts.length-1].id;
 							}
 						} else {
 							if (accounts.length > 1) {

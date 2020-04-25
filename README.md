@@ -58,6 +58,10 @@ export PGUSER=development;
 export PGPASSWORD=123456;
 export PGDATABASE=rufs_nfe;
 
+#Only to clean already existent configuration :
+
+rm proxy-conf.json openapi.json &&
+
 #Only to clean already existent testing data :
 
 psql "$PGDATABASE"_development -c "DROP DATABASE IF EXISTS $PGDATABASE;" &&
@@ -68,6 +72,8 @@ psql "$PGDATABASE"_development -c "CREATE DATABASE $PGDATABASE;" &&
 nodejs --inspect --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-base-es6/proxy.js --add-modules="$PWD/rufs-crud-es6/CrudMicroService.js,$PWD/rufs-nfe-es6/NfeMicroService.js";
 
 > log.txt &
+
+nodejs --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-base-es6/proxy.js --add-modules="$PWD/rufs-crud-es6/CrudMicroService.js,$PWD/rufs-nfe-es6/NfeMicroService.js" > log.txt &
 
 ## Web application
 
