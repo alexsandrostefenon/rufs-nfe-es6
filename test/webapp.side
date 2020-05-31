@@ -2,7 +2,7 @@
   "id": "5ebf3ab3-7a16-4ca5-bc32-95e2ddbf6e1b",
   "version": "2.0",
   "name": "webapp",
-  "url": "http://localhost:8080/crud/",
+  "url": "http://localhost:8080/nfe/",
   "tests": [{
     "id": "a634f1aa-1398-4f5e-8b60-14bc2320cbf0",
     "name": "request_buy_new",
@@ -758,7 +758,7 @@
     }, {
       "id": "92a3b14a-913d-4bfc-9359-cc86b42a95f5",
       "comment": "",
-      "command": "//assertElementNotPresent",
+      "command": "assertElementNotPresent",
       "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=93209765016110')]",
       "targets": [],
       "value": ""
@@ -766,7 +766,7 @@
       "id": "4f9b2f1f-a223-4c57-b9ee-057351aec9e8",
       "comment": "",
       "command": "clickAt",
-      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=80803792034+++')]",
+      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=80803792034')]",
       "targets": [
         ["linkText=View", "linkText"],
         ["css=td:nth-child(1) > .ng-binding", "css:finder"],
@@ -795,8 +795,8 @@
     }, {
       "id": "27999a6f-6ba9-4b10-856a-30f77ff17ab4",
       "comment": "",
-      "command": "//assertElementNotPresent",
-      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=80803792034+++')]",
+      "command": "assertElementNotPresent",
+      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=80803792034')]",
       "targets": [],
       "value": ""
     }, {
@@ -832,7 +832,7 @@
     }, {
       "id": "ec7acbf0-41b8-4593-8af0-f5b0ab524d57",
       "comment": "",
-      "command": "//assertElementNotPresent",
+      "command": "assertElementNotPresent",
       "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=60701190000104')]",
       "targets": [],
       "value": ""
@@ -1383,7 +1383,7 @@
       "command": "type",
       "target": "id=personForm-country",
       "targets": [],
-      "value": "1058 - Brasil - BR - Brazil"
+      "value": "1058 - Brazil - BR - Brasil"
     }, {
       "id": "047bdbc1-0f89-49bf-8779-9b6b25518c5b",
       "comment": "",
@@ -1491,17 +1491,17 @@
     }, {
       "id": "d5c4512f-0ecc-4ff8-8f9b-429a725a1046",
       "comment": "",
-      "command": "//assertValue",
+      "command": "assertValue",
       "target": "id=personForm-cnpjCpf",
       "targets": [],
       "value": "93209765016110"
     }, {
       "id": "3123bcb1-6804-4a06-a37b-2507e72718f4",
       "comment": "",
-      "command": "//assertValue",
+      "command": "assertValue",
       "target": "id=personForm-ieRg",
       "targets": [],
-      "value": "0240296389 "
+      "value": "0240296389"
     }, {
       "id": "4ca4a86e-1243-4c80-919b-a16328685bc2",
       "comment": "",
@@ -1840,7 +1840,7 @@
       "id": "ed37c170-9800-4e6d-9b3e-782a2aff4e36",
       "comment": "",
       "command": "click",
-      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=80803792034+++')]",
+      "target": "xpath=//a[contains(@href, '#!/app/person/view?primaryKey.cnpjCpf=80803792034')]",
       "targets": [
         ["css=.ng-scope:nth-child(2) > td:nth-child(1) > .ng-binding", "css:finder"],
         ["xpath=(//a[contains(text(),'View')])[2]", "xpath:link"],
@@ -1859,17 +1859,17 @@
     }, {
       "id": "91327a4b-f9f5-47f5-a2ea-156aad037952",
       "comment": "",
-      "command": "//assertValue",
+      "command": "assertValue",
       "target": "id=personForm-cnpjCpf",
       "targets": [],
       "value": "80803792034"
     }, {
       "id": "db3b035b-ec8f-4a46-878b-d40b3f89834a",
       "comment": "",
-      "command": "assertValue",
+      "command": "//assertValue",
       "target": "id=personForm-country",
       "targets": [],
-      "value": "1058 - Brazil - Brasil - BR"
+      "value": "1058 - Brazil - BR - Brasil"
     }]
   }, {
     "id": "eea20f70-91bb-44c6-a247-b90fbda3ce5c",
@@ -2114,6 +2114,66 @@
       "targets": [],
       "value": "1058 - Brazil - Brasil - BR"
     }]
+  }, {
+    "id": "3d514cd3-dc09-488b-a766-f6febea5923a",
+    "name": "import_nfe",
+    "commands": [{
+      "id": "c2543608-834e-401f-be44-28a370c96f5c",
+      "comment": "",
+      "command": "run",
+      "target": "login_guest",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e486141d-a78a-47d8-8d0c-0d7c00d872bc",
+      "comment": "",
+      "command": "click",
+      "target": "id=single-button-actions",
+      "targets": [
+        ["id=single-button-actions", "id"],
+        ["css=#single-button-actions", "css:finder"],
+        ["xpath=//button[@id='single-button-actions']", "xpath:attributes"],
+        ["xpath=//div[@id='header']/div/div[2]/ul/div[2]/button", "xpath:idRelative"],
+        ["xpath=//div[2]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Actions')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4d2e0471-8f9b-4df8-82e9-ac1cdc670572",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Importar",
+      "targets": [
+        ["linkText=Importar", "linkText"],
+        ["css=.open .ng-scope:nth-child(3) > .ng-binding", "css:finder"],
+        ["xpath=//a[contains(text(),'Importar')]", "xpath:link"],
+        ["xpath=//div[@id='header']/div/div[2]/ul/div[2]/ul/li[3]/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/request/import?overwrite.type=1&overwrite.state=10')]", "xpath:href"],
+        ["xpath=//li[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Importar')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d8da5429-9c5e-456d-b5d4-0ea7fb0aac24",
+      "comment": "",
+      "command": "select",
+      "target": "id=videoInput",
+      "targets": [],
+      "value": "label=File"
+    }, {
+      "id": "a9bfcbaa-a5af-4597-aec0-bd7f7400fb3d",
+      "comment": "",
+      "command": "type",
+      "target": "id=input-file",
+      "targets": [
+        ["id=input-file", "id"],
+        ["css=#input-file", "css:finder"],
+        ["xpath=//input[@id='input-file']", "xpath:attributes"],
+        ["xpath=//div[@id='main']/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "/home/alexsandro/workspace/micro_services/nfe_qrcode_43191104300484000145650010003152981390898653.jpg"
+    }]
   }],
   "suites": [{
     "id": "08cb74cc-4ee3-417f-b0eb-05481b3e747a",
@@ -2122,6 +2182,6 @@
     "timeout": 3000,
     "tests": ["bcc3dc1b-75c9-4b9d-af0f-657ccc9dbc56", "459c824d-1825-4183-90db-145872eac86e", "a634f1aa-1398-4f5e-8b60-14bc2320cbf0", "1e9f3675-4bd4-4450-a7a6-c31b52b5e3b8", "eeb9e8f0-7a60-4b9d-9422-86d8f667fe4d", "a4720c93-1155-49f1-940e-1240e2c6adf6"]
   }],
-  "urls": ["https://192.168.2.139:8443/angular-es6-crud-nodejs-j2ee7", "https://192.168.2.139:8443/", "https://localhost:9443/crud", "https://localhost:8443/angular-es6-crud-nodejs-j2ee7", "https://localhost:7443/", "http://localhost:8080/crud", "http://localhost:8090/crud/", "http://localhost:8080/crud/"],
+  "urls": ["https://192.168.2.139:8443/angular-es6-crud-nodejs-j2ee7", "https://192.168.2.139:8443/", "https://localhost:9443/crud", "https://localhost:8443/angular-es6-crud-nodejs-j2ee7", "https://localhost:7443/", "http://localhost:8080/crud", "http://localhost:8090/crud/", "http://localhost:8080/crud/", "http://localhost:8080/nfe/"],
   "plugins": []
 }

@@ -1,5 +1,5 @@
-import {CrudController} from "/crud/es6/CrudController.js";
-import {CrudItem} from "/crud/es6/CrudItem.js";
+import {CrudController} from "./CrudController.js";
+import {CrudItem} from "./CrudItem.js";
 import {NfeParser} from "./NfeImporterController.js";
 
 export class RequestController extends CrudController {
@@ -98,11 +98,11 @@ export class RequestController extends CrudController {
 					payment.value = this.instance.sumValue - this.instance.paymentsValue;
 	        		// account
 	        		{
-						const accounts = this.crudItemPayment.fields.account.filterResults;
+						const accounts = this.crudItemPayment.properties.account.filterResults;
 
 						if (payment.type == 1) {
 							if (accounts.length > 0) {
-								this.crudItemPayment.instance.account = accounts[0].id;//accounts[accounts.length-1].id;
+								this.crudItemPayment.instance.account = accounts[accounts.length-1].id;//accounts[0].id;//
 							}
 						} else {
 							if (accounts.length > 1) {
@@ -145,8 +145,8 @@ export class RequestController extends CrudController {
     }
 
 	filterRequestState() {
-		this.fields.state.filterResults = [];
-		this.fields.state.filterResultsStr = [];
+		this.properties.state.filterResults = [];
+		this.properties.state.filterResultsStr = [];
 		const list = this.serverConnection.services.requestState.list;
 
 		for (let itemRef of list) {
@@ -159,8 +159,8 @@ export class RequestController extends CrudController {
 						(item.id == itemRef.id) ||
 						(item.id == itemRef.next) ||
 						(item.prev == itemRef.id)) {
-						this.fields.state.filterResults.push(item);
-						this.fields.state.filterResultsStr.push(this.serverConnection.services.requestState.listStr[i]);
+						this.properties.state.filterResults.push(item);
+						this.properties.state.filterResultsStr.push(this.serverConnection.services.requestState.listStr[i]);
 					}
 				}
 
@@ -194,18 +194,18 @@ export class RequestController extends CrudController {
 	    	this.filterRequestState();
 		}
 
-		this.fields.type.readOnly = true;
+		this.properties.type.readOnly = true;
 
 		if (this.serverConnection.services.requestService == undefined) {
-			this.fields.servicesValue.hiden = true;
+			this.properties.servicesValue.hiden = true;
 		}
 
 		if (this.serverConnection.services.requestFreight == undefined) {
-			this.fields.transportValue.hiden = true;
+			this.properties.transportValue.hiden = true;
 		}
 
 		if (this.serverConnection.services.requestPayment == undefined) {
-			this.fields.paymentsValue.hiden = true;
+			this.properties.paymentsValue.hiden = true;
 		}
 
 		if (action == "import") {

@@ -22,7 +22,7 @@ where $NODE_MODULES_PATH point to your desired node_modules folder destination.
 
 or
 
-`yarnpkg install --cwd ./rufs-nfe-es6 --modules-folder $NODE_MODULES_PATH`
+`yarnpkg install --cwd ./rufs-nfe-es6`
 
 ## PostgreSql setup
 
@@ -45,7 +45,7 @@ Note, database "rufs_nfe_development" is only for testing purposes.
 #Create Rufs basic schema with command :
 
 if [ "X$NODE_MODULES_PATH" == "X" ]; then
-	NODE_MODULES_PATH="./rufs-nfe-es6/node_modules/";
+	NODE_MODULES_PATH=$PWD;
 fi
 
 ### Run Ecosystem
@@ -53,14 +53,14 @@ fi
 #Expose database connection configurations :
 
 export PGHOST=localhost;
-export PPORT=5432;
+export PGPORT=5432;
 export PGUSER=development;
 export PGPASSWORD=123456;
 export PGDATABASE=rufs_nfe;
 
 #Only to clean already existent configuration :
 
-rm proxy-conf.json openapi.json &&
+rm *.json &&
 
 #Only to clean already existent testing data :
 
@@ -69,7 +69,7 @@ psql "$PGDATABASE"_development -c "CREATE DATABASE $PGDATABASE;" &&
 
 #Execute rufs-proxy to load and start microservices :
 
-nodejs --inspect --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-base-es6/proxy.js --add-modules="$PWD/rufs-crud-es6/CrudMicroService.js,$PWD/rufs-nfe-es6/NfeMicroService.js";
+nodejs --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-base-es6/proxy.js --add-modules="$PWD/rufs-nfe-es6/NfeMicroService.js";
 
 > log.txt &
 

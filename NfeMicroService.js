@@ -1,7 +1,9 @@
-import {RufsMicroService} from "../rufs-base-es6/RufsMicroService.js";
+import {CrudMicroService} from "../rufs-crud-es6/CrudMicroService.js";
 import {Response} from "../rufs-base-es6/server-utils.js";
 import fetch from "node-fetch";
 import fs from "fs";
+import url from "url";
+import path from "path";
 /*
 import {NfeParser} from "./webapp/es6/NfeImporterController.js"
 import {MicroServiceClient} from "../rufs-base-es6/MicroServiceClient.js";
@@ -20,9 +22,11 @@ setTimeoutPromise(86400*1000).then(() => {
 	});
 });
 //*/
-class NfeMicroService extends RufsMicroService {
+class NfeMicroService extends CrudMicroService {
 
 	constructor(config) {
+		const defaultStaticPaths = path.join(path.dirname(url.fileURLToPath(import.meta.url)), "webapp");
+		config.defaultStaticPaths = config.defaultStaticPaths != undefined ? config.defaultStaticPaths + "," + defaultStaticPaths : defaultStaticPaths;
 		super(config, "nfe", true);
 	}
 
@@ -83,7 +87,7 @@ INSERT INTO rufs_service (name, title, fields) VALUES ('requestType', 'Tipo de R
 INSERT INTO rufs_service (name, title, fields) VALUES ('stockAction', 'Ação sobre o Estoque', '{}');
 INSERT INTO rufs_service (name, title, fields) VALUES ('requestState', 'Situação da Requisição', '{"name":{"shortDescription":true},"type":{"shortDescription":true}}');
 INSERT INTO rufs_service (name, title, fields) VALUES ('request', 'Requisições de Entrada e Saída', '{"date":{"orderIndex":1,"sortType":"desc"},"type":{"tableVisible":false}}');
-INSERT INTO rufs_service (name, title, fields) VALUES ('requestNfe', 'Nota Fiscal Eletrônica', '{"indpag":{"options":"0,1,2"},"iddest":{"options":"1,2,3"},"cdv":{"hiden":true},"indfinal":{"options":"0,1"},"indpres":{"options":"0,1,2,3,4,9"}}');
+INSERT INTO rufs_service (name, title, fields) VALUES ('requestNfe', 'Nota Fiscal Eletrônica', '{"indpag":{"enum":"0,1,2"},"iddest":{"enum":"1,2,3"},"cdv":{"hiden":true},"indfinal":{"enum":"0,1"},"indpres":{"enum":"0,1,2,3,4,9"}}');
 INSERT INTO rufs_service (name, title, fields) VALUES ('requestFreight', 'Frete', '{}');
 INSERT INTO rufs_service (name, title, fields) VALUES ('requestProduct', 'Entrada/Saída de Produtos', '{}');
 INSERT INTO rufs_service (name, title, fields) VALUES ('requestService', 'Serviços Requisitados/Prestados', '{}');
