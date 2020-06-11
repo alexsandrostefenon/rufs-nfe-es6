@@ -1,11 +1,11 @@
 //import fs from "fs";
 const fs = undefined;
 
-export class NfeParser {
+class NfeParser {
     // public
     static load(serverConnection, chaveNFe) {
     	const url = "/nfe/rest/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-COM_2.asp" + "?chaveNFe=" + chaveNFe + "&HML=false&NFCE63968B6";
-    	fetch(url).then(response => {
+    	return fetch(url).then(response => {
     		return response.json();
 		}).
 		then(json => this.process(serverConnection, chaveNFe, json.data)).
@@ -16,13 +16,13 @@ export class NfeParser {
 
 	static async process(serverConnection, chaveNFe, text) {
 		const html = this.formatHtml(text);
-			console.log(html);
-			if (fs) fs.writeFileSync(`nfe_${chaveNFe}_formated.html`, html);
-			const nfeMap = this.parseHtml(html);
-			if (fs) fs.writeFileSync(`nfe_${chaveNFe}_formated.json`, JSON.stringify(nfeMap, (k, v) => v instanceof(Map) ? Array.from(v.keys()) : v, "\t"));
-			const nfeObj = this.exportNfe(nfeMap);
-			if (fs) fs.writeFileSync(`nfe_${chaveNFe}_obj.json`, JSON.stringify(nfeObj, null, "\t"));
-			return this.merge(serverConnection, nfeObj).then(nfe => {
+		console.log(html);
+		if (fs) fs.writeFileSync(`nfe_${chaveNFe}_formated.html`, html);
+		const nfeMap = this.parseHtml(html);
+		if (fs) fs.writeFileSync(`nfe_${chaveNFe}_formated.json`, JSON.stringify(nfeMap, (k, v) => v instanceof(Map) ? Array.from(v.keys()) : v, "\t"));
+		const nfeObj = this.exportNfe(nfeMap);
+		if (fs) fs.writeFileSync(`nfe_${chaveNFe}_obj.json`, JSON.stringify(nfeObj, null, "\t"));
+		return this.merge(serverConnection, nfeObj).then(nfe => {
 			if (fs) fs.writeFileSync(`nfe_${chaveNFe}_merged.json`, JSON.stringify(nfe, null, "\t"));
 			return nfe;
 		}).catch(err => {
@@ -552,3 +552,5 @@ request_nfe :
 	}
 
 }
+
+export {NfeParser}

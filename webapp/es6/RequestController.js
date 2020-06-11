@@ -167,6 +167,8 @@ export class RequestController extends CrudController {
 				break;
 			}
 		}
+
+		this.serverConnection.$scope.$apply();
 	}
 
 	update() {
@@ -180,77 +182,80 @@ export class RequestController extends CrudController {
     	return super.get(primaryKey).then(response => {
 	    	this.filterRequestState();
            	this.enableRequestFields();
-    		this.$scope.$apply();
         	return response;
     	});
     }
 
     process(action, params) {
-    	super.process(action, params);
-		// TODO : load saveAndExit from method process(action,params)
-    	this.rufsService.params.saveAndExit = false;
+    	return super.process(action, params).then(() => {
+			// TODO : load saveAndExit from method process(action,params)
+			this.rufsService.params.saveAndExit = false;
 
-    	if (action == "new" || action == "edit") {
-	    	this.filterRequestState();
-		}
-
-		this.properties.type.readOnly = true;
-
-		if (this.serverConnection.services.requestService == undefined) {
-			this.properties.servicesValue.hiden = true;
-		}
-
-		if (this.serverConnection.services.requestFreight == undefined) {
-			this.properties.transportValue.hiden = true;
-		}
-
-		if (this.serverConnection.services.requestPayment == undefined) {
-			this.properties.paymentsValue.hiden = true;
-		}
-
-		if (action == "import") {
-			this.templateModel = "/nfe/templates/importer.html";
-			this.setValues(params.overwrite);
-			this.listDevices = ["File"];
-			// QRCODE reader Copyright 2011 Lazar Laszlo, http://www.webqr.com
-			qrcode.canvas_qr2 = document.createElement('canvas');
-			qrcode.canvas_qr2.id = "qr-canvas";
-			qrcode.qrcontext2 = qrcode.canvas_qr2.getContext('2d');
-	//		qrcode.canvas_qr2.width = video.videoWidth;
-	//		qrcode.canvas_qr2.height = video.videoHeight;
-
-			qrcode.callback = (response) => {
-				if (response.startsWith("error") == false) {
-					console.log(`[RequestController.qrcode] :`, response);
-					let chaveNFe;
-
-					if (response.includes("?chNFe=") == true) {
-						chaveNFe = response.substr(response.indexOf("?chNFe=")+7, 44);
-					} else if (response.includes("?p=") == true) {
-						chaveNFe = response.substr(response.indexOf("?p=")+3, 44);
-					}
-					
-					NfeParser.load(this.serverConnection, chaveNFe);
-				}
-			};
-
-			if (navigator.mediaDevices != undefined) {
-				if (navigator.mediaDevices.enumerateDevices != undefined) {
-					navigator.mediaDevices.enumerateDevices().then(devices => {
-					  devices.forEach(device => {
-						if (device.kind === "videoinput") {
-							this.listDevices.push(device.deviceId);
-							console.log(device);
-						}
-					  });
-					});
-				} else {
-				  console.error("enumerateDevices() not supported.");
-				}
-			} else {
-			  console.error("mediaDevices() not supported.");
+			if (action == "new" || action == "edit") {
+				this.filterRequestState();
 			}
-		}
+
+			this.properties.type.readOnly = true;
+
+			if (this.serverConnection.services.requestService == undefined) {
+				this.properties.servicesValue.hiden = true;
+			}
+
+			if (this.serverConnection.services.requestFreight == undefined) {
+				this.properties.transportValue.hiden = true;
+			}
+
+			if (this.serverConnection.services.requestPayment == undefined) {
+				this.properties.paymentsValue.hiden = true;
+			}
+
+			if (action == "import") {
+				this.templateModel = "/nfe/templates/importer.html";
+				this.setValues(params.overwrite);
+				this.listDevices = ["File"];
+				// QRCODE reader Copyright 2011 Lazar Laszlo, http://www.webqr.com
+				qrcode.canvas_qr2 = document.createElement('canvas');
+				qrcode.canvas_qr2.id = "qr-canvas";
+				qrcode.qrcontext2 = qrcode.canvas_qr2.getContext('2d');
+		//		qrcode.canvas_qr2.width = video.videoWidth;
+		//		qrcode.canvas_qr2.height = video.videoHeight;
+
+				qrcode.callback = (response) => {
+					if (response.startsWith("error") == false) {
+						console.log(`[RequestController.qrcode] :`, response);
+						let chaveNFe;
+
+						if (response.includes("?chNFe=") == true) {
+							chaveNFe = response.substr(response.indexOf("?chNFe=")+7, 44);
+						} else if (response.includes("?p=") == true) {
+							chaveNFe = response.substr(response.indexOf("?p=")+3, 44);
+						}
+
+						NfeParser.load(this.serverConnection, chaveNFe);
+					}
+				};
+
+				if (navigator.mediaDevices != undefined) {
+					if (navigator.mediaDevices.enumerateDevices != undefined) {
+						navigator.mediaDevices.enumerateDevices().then(devices => {
+						  devices.forEach(device => {
+							if (device.kind === "videoinput") {
+								this.listDevices.push(device.deviceId);
+								console.log(device);
+							}
+						  });
+						});
+					} else {
+					  console.error("enumerateDevices() not supported.");
+					}
+				} else {
+				  console.error("mediaDevices() not supported.");
+				}
+			}
+    	}).
+    	then(() => {
+			this.serverConnection.$scope.$apply();
+    	});
     }
 	
     stop(stream) {
@@ -271,7 +276,7 @@ export class RequestController extends CrudController {
 				try {
 						qrcode.decode();
 						this.stop(stream);
-						this.$scope.$apply();
+						this.serverConnection.$scope.$apply();
 				} catch (e) {       
 						console.log(e);
 						setTimeout(processImage, 1000);
