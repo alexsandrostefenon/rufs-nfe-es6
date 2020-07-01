@@ -2174,13 +2174,183 @@
       ],
       "value": "/home/alexsandro/workspace/micro_services/nfe_qrcode_43191104300484000145650010003152981390898653.jpg"
     }]
+  }, {
+    "id": "5cf4355e-0362-4c5a-8dc8-d8be0e765c91",
+    "name": "user_permission_restore",
+    "commands": [{
+      "id": "75a5b2ec-70e5-4ba6-bb72-9285b4eec61c",
+      "comment": "",
+      "command": "run",
+      "target": "login_admin",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "eb0ce648-8392-4177-befc-8e12ef361b09",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//a[contains(@href, '#!/app/rufs_user/view?primaryKey.id=2')]",
+      "targets": [
+        ["css=.ng-scope:nth-child(2) > td:nth-child(1) > .ng-binding", "css:finder"],
+        ["xpath=(//a[contains(text(),'View')])[2]", "xpath:link"],
+        ["xpath=//tbody[@id='rufsUserForm-crud-table-body']/tr[2]/td/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/rufs_user/view?primaryKey.id=2')]", "xpath:href"],
+        ["xpath=//tr[2]/td/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f27f1d1e-982f-4836-abd1-591ddfe7ea5d",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//a[contains(@href, '#!/app/rufs_user/edit?primaryKey.id=2')]",
+      "targets": [
+        ["id=rufsUserForm-update", "id"],
+        ["linkText=Edit", "linkText"],
+        ["name=update", "name"],
+        ["css=#rufsUserForm-update", "css:finder"],
+        ["xpath=//a[contains(text(),'Edit')]", "xpath:link"],
+        ["xpath=//a[@id='rufsUserForm-update']", "xpath:attributes"],
+        ["xpath=//form[@id='rufsUserForm']/div[2]/div/a", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, '#!/app/rufs_user/edit?primaryKey.id=2')]", "xpath:href"],
+        ["xpath=//div[2]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,' Edit')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ad539c6c-dfe0-4344-b3eb-c4f01a61b4bd",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=rolesForm-edit-request",
+      "targets": [
+        ["id=rolesForm-edit-request", "id"],
+        ["css=#rolesForm-edit-request", "css:finder"],
+        ["xpath=(//a[contains(text(),'Edit')])[21]", "xpath:link"],
+        ["xpath=//a[@id='rolesForm-edit-request']", "xpath:attributes"],
+        ["xpath=//tbody[@id='rolesForm-crud-table-body']/tr[20]/td/a[2]", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '')])[228]", "xpath:href"],
+        ["xpath=//tr[20]/td/a[2]", "xpath:position"]
+      ],
+      "value": "28,8"
+    }, {
+      "id": "cab46697-aa21-4050-99bc-bcf1181128e1",
+      "comment": "",
+      "command": "click",
+      "target": "id=rolesForm-delete",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8c535de3-6c44-4c96-8cbd-12b37dbcbc35",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=rolesForm-add",
+      "targets": [],
+      "value": "34,20"
+    }, {
+      "id": "191a8bf8-8190-45f2-84db-c8e65d756ff5",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=rolesForm-edit-product",
+      "targets": [
+        ["id=rolesForm-edit-product", "id"],
+        ["css=#rolesForm-edit-product", "css:finder"],
+        ["xpath=(//a[contains(text(),'Edit')])[19]", "xpath:link"],
+        ["xpath=//a[@id='rolesForm-edit-product']", "xpath:attributes"],
+        ["xpath=//tbody[@id='rolesForm-crud-table-body']/tr[18]/td/a", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '')])[207]", "xpath:href"],
+        ["xpath=//tr[18]/td/a", "xpath:position"]
+      ],
+      "value": "28,9"
+    }, {
+      "id": "3a9768b3-b9cf-41dc-8a1b-1a8d8dc036fd",
+      "comment": "",
+      "command": "click",
+      "target": "id=rolesForm-delete",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "11c500a9-5f1a-451a-9e15-6c1b2782b3b5",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=rolesForm-add",
+      "targets": [],
+      "value": "36,17"
+    }, {
+      "id": "7c413a9f-fa27-46af-a117-3992c9138c48",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=rolesForm-edit-person",
+      "targets": [
+        ["id=rolesForm-edit-person", "id"],
+        ["css=#rolesForm-edit-person", "css:finder"],
+        ["xpath=(//a[contains(text(),'Edit')])[17]", "xpath:link"],
+        ["xpath=//a[@id='rolesForm-edit-person']", "xpath:attributes"],
+        ["xpath=//tbody[@id='rolesForm-crud-table-body']/tr[16]/td/a[2]", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '')])[188]", "xpath:href"],
+        ["xpath=//tr[16]/td/a[2]", "xpath:position"]
+      ],
+      "value": "28,9"
+    }, {
+      "id": "dca7342c-ca1c-4080-a0fa-93f1011e8f0c",
+      "comment": "",
+      "command": "click",
+      "target": "id=rolesForm-delete",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "54570755-cb1c-4199-a923-be787f5164a1",
+      "comment": "",
+      "command": "clickAt",
+      "target": "id=rolesForm-add",
+      "targets": [],
+      "value": "36,17"
+    }, {
+      "id": "6b26a292-78ff-4f78-b1a0-c3344b7074d7",
+      "comment": "",
+      "command": "click",
+      "target": "id=rolesForm-edit-account",
+      "targets": [
+        ["id=rolesForm-edit-account", "id"],
+        ["css=#rolesForm-edit-account", "css:finder"],
+        ["xpath=(//a[contains(text(),'Edit')])[12]", "xpath:link"],
+        ["xpath=//a[@id='rolesForm-edit-account']", "xpath:attributes"],
+        ["xpath=//tbody[@id='rolesForm-crud-table-body']/tr[11]/td/a[2]", "xpath:idRelative"],
+        ["xpath=(//a[contains(@href, '')])[138]", "xpath:href"],
+        ["xpath=//tr[11]/td/a[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "575ed15c-b8ec-4370-9919-716456678f1d",
+      "comment": "",
+      "command": "click",
+      "target": "id=rolesForm-delete",
+      "targets": [
+        ["id=rolesForm-delete", "id"],
+        ["css=#rolesForm-delete", "css:finder"],
+        ["xpath=//input[@id='rolesForm-delete']", "xpath:attributes"],
+        ["xpath=//div[@id='rolesForm-delete_controls']/input", "xpath:idRelative"],
+        ["xpath=//div[2]/div[5]/div/div/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "147d6c9e-fc16-4ff6-bb60-4cab3ef70a2d",
+      "comment": "",
+      "command": "click",
+      "target": "id=rolesForm-add",
+      "targets": [
+        ["id=rolesForm-add", "id"],
+        ["css=#rolesForm-add", "css:finder"],
+        ["xpath=//button[@id='rolesForm-add']", "xpath:attributes"],
+        ["xpath=//form[@id='rolesForm']/div[3]/div/button", "xpath:idRelative"],
+        ["xpath=//div[3]/div/button", "xpath:position"]
+      ],
+      "value": ""
+    }]
   }],
   "suites": [{
     "id": "08cb74cc-4ee3-417f-b0eb-05481b3e747a",
     "name": "Default Suite",
     "parallel": false,
     "timeout": 3000,
-    "tests": ["bcc3dc1b-75c9-4b9d-af0f-657ccc9dbc56", "459c824d-1825-4183-90db-145872eac86e", "a634f1aa-1398-4f5e-8b60-14bc2320cbf0", "1e9f3675-4bd4-4450-a7a6-c31b52b5e3b8", "eeb9e8f0-7a60-4b9d-9422-86d8f667fe4d", "a4720c93-1155-49f1-940e-1240e2c6adf6"]
+    "tests": ["bcc3dc1b-75c9-4b9d-af0f-657ccc9dbc56", "459c824d-1825-4183-90db-145872eac86e", "a634f1aa-1398-4f5e-8b60-14bc2320cbf0", "1e9f3675-4bd4-4450-a7a6-c31b52b5e3b8", "eeb9e8f0-7a60-4b9d-9422-86d8f667fe4d", "a4720c93-1155-49f1-940e-1240e2c6adf6", "5cf4355e-0362-4c5a-8dc8-d8be0e765c91"]
   }],
   "urls": ["https://192.168.2.139:8443/angular-es6-crud-nodejs-j2ee7", "https://192.168.2.139:8443/", "https://localhost:9443/crud", "https://localhost:8443/angular-es6-crud-nodejs-j2ee7", "https://localhost:7443/", "http://localhost:8080/crud", "http://localhost:8090/crud/", "http://localhost:8080/crud/", "http://localhost:8080/nfe/"],
   "plugins": []
