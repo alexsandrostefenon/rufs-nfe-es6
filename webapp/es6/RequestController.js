@@ -51,7 +51,7 @@ export class RequestController extends CrudController {
     }
 
     enableRequestService() {
-		if (this.serverConnection.services.requestService != undefined && this.serverConnection.services.requestService.params.access.put == true) {
+		if (this.serverConnection.services.requestService != undefined && this.serverConnection.services.requestService.access.put == true) {
 			const onChanged = (list) => {
 				this.instance.servicesValue = this.getSumValues(list);
 				this.instance.descValue = this.getSumDescValues(list);
@@ -74,7 +74,7 @@ export class RequestController extends CrudController {
     }
     
     enableRequestPayment() {
-		if (this.serverConnection.services.requestPayment != undefined && this.serverConnection.services.requestPayment.params.access.put == true) {
+		if (this.serverConnection.services.requestPayment != undefined && this.serverConnection.services.requestPayment.access.put == true) {
 		    const onPaymentsChanged = (list) => {
 		    	this.instance.paymentsValue = this.getSumValues(list);
 		    }
@@ -127,7 +127,7 @@ export class RequestController extends CrudController {
     }
     
     enableRequestFreight() {
-		if (this.serverConnection.services.requestFreight != undefined && this.serverConnection.services.requestFreight.params.access.put == true) {
+		if (this.serverConnection.services.requestFreight != undefined && this.serverConnection.services.requestFreight.access.put == true) {
 		    const onTransportChanged = (list) => {
 		    	this.instance.transportValue = this.getSumValues(list);
 		    	this.instance.sumValue = this.instance.productsValue + this.instance.servicesValue + this.instance.transportValue;
