@@ -42,12 +42,6 @@ exit;
 
 Note, database "rufs_nfe_development" is only for testing purposes.
 
-#Create Rufs basic schema with command :
-
-if [ "X$NODE_MODULES_PATH" == "X" ]; then
-	NODE_MODULES_PATH=$PWD;
-fi
-
 ### Run Ecosystem
 
 #Expose database connection configurations :
@@ -69,11 +63,7 @@ psql "$PGDATABASE"_development -c "CREATE DATABASE $PGDATABASE;" &&
 
 #Execute rufs-proxy to load and start microservices :
 
-nodejs --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-base-es6/proxy.js --add-modules="$PWD/rufs-nfe-es6/NfeMicroService.js";
-
-> log.txt &
-
-nodejs --experimental-modules --loader $NODE_MODULES_PATH/rufs-base-es6/custom-loader.mjs $NODE_MODULES_PATH/rufs-base-es6/proxy.js --add-modules="$PWD/rufs-crud-es6/CrudMicroService.js,$PWD/rufs-nfe-es6/NfeMicroService.js" > log.txt &
+nodejs --experimental-modules --loader ./rufs-base-es6/custom-loader.mjs ./rufs-base-es6/proxy.js --add-modules="../rufs-nfe-es6/NfeMicroService.js";
 
 ## Web application
 
