@@ -25,6 +25,7 @@ setTimeoutPromise(86400*1000).then(() => {
 class NfeMicroService extends CrudMicroService {
 
 	constructor(config) {
+		if (config == undefined) config = {};
 		const defaultStaticPaths = path.join(path.dirname(url.fileURLToPath(import.meta.url)), "webapp");
 		config.defaultStaticPaths = config.defaultStaticPaths != undefined ? config.defaultStaticPaths + "," + defaultStaticPaths : defaultStaticPaths;
 		super(config, "nfe", true);
@@ -32,7 +33,7 @@ class NfeMicroService extends CrudMicroService {
 
 	onRequest(req, res, next, resource, action) {
 		console.log(`[NfeMicroService.onRequest] : ${action}`);
-		
+
 		if (req.path == "/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-COM_2.asp") {
 			const url = "https://www.sefaz.rs.gov.br" + req.url;
 			console.log(`[NfeMicroService.onRequest.fetch] : ${url}`);

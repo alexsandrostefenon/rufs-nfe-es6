@@ -75,7 +75,7 @@
         ["xpath=//div[@id='requestForm-state_controls']/select", "xpath:idRelative"],
         ["xpath=//select", "xpath:position"]
       ],
-      "value": "string:Compra - Solicitar Orçamento - estimedIn"
+      "value": "string:Compra - Solicitar Orçamento"
     }, {
       "id": "e97162a7-edce-4ad1-a64b-72c1b58c4054",
       "comment": "",
