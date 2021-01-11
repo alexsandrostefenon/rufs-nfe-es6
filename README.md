@@ -54,7 +54,7 @@ export PGDATABASE=rufs_nfe;
 
 #Only to clean already existent configuration :
 
-rm *.json &&
+rm *openapi-nfe.json &&
 
 #Only to clean already existent testing data :
 
@@ -63,7 +63,7 @@ psql "$PGDATABASE"_development -c "CREATE DATABASE $PGDATABASE;" &&
 
 #Execute rufs-proxy to load and start microservices :
 
-nodejs --experimental-modules --loader ./rufs-base-es6/custom-loader.mjs ./rufs-base-es6/proxy.js --add-modules="../rufs-nfe-es6/NfeMicroService.js";
+nodejs --experimental-modules --loader ./rufs-base-es6/custom-loader.mjs ./rufs-base-es6/proxy.js --add-modules ../rufs-nfe-es6/NfeMicroService.js;
 
 ## Web application
 

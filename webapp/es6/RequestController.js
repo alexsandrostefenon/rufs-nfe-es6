@@ -211,7 +211,7 @@ export class RequestController extends CrudController {
 
 			if (action == "import") {
 				this.templateModel = "/nfe/templates/importer.html";
-				this.setValues(params.overwrite, true);
+				this.setValues(params.overwrite, true, true);
 				this.listDevices = ["File"];
 				// QRCODE reader Copyright 2011 Lazar Laszlo, http://www.webqr.com
 				qrcode.canvas_qr2 = document.createElement('canvas');
