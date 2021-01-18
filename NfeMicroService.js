@@ -12,7 +12,7 @@ import util from "util";
 const setTimeoutPromise = util.promisify(setTimeout);
 
 setTimeoutPromise(86400*1000).then(() => {
-	const rufsClient = new MicroServiceClient({"port":8090, "appName":"crud", "userId":"guest", "password":"123456"});
+	const rufsClient = new MicroServiceClient({"port":8090, "appName":"crud", "user":"guest", "password":"123456"});
 
 	rufsClient.login().then(() => {
 		//const chaveNFe = "43191293209765016110653110002321001004193718";
