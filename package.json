@@ -3,6 +3,7 @@
   "name": "rufs-nfe-es6",
   "version": "1.0.2",
   "dependencies": {
-    "rufs-crud-es6": "git+https://github.com/alexsandrostefenon/rufs-crud-es6.git"
+    "rufs-crud-es6": "git+https://github.com/alexsandrostefenon/rufs-crud-es6.git",
+    "xml2js": "^0.4.23"
   }
 }

@@ -61,6 +61,7 @@ psql rufs_nfe_development -c "CREATE DATABASE rufs_nfe;" &&
 #Execute rufs-proxy to load and start microservices :
 
 PGHOST=localhost PGPORT=5432 PGUSER=development PGPASSWORD=123456 PGDATABASE=rufs_nfe nodejs ./rufs-base-es6/proxy.js --add-modules ../rufs-nfe-es6/NfeMicroService.js;
+#PGHOST=localhost PGPORT=5432 PGUSER=development PGPASSWORD=123456 PGDATABASE=rufs_nfe nodejs --inspect ./rufs-nfe-es6/NfeMicroService.js;
 
 ## Web application
 

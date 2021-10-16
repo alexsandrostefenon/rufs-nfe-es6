@@ -242,7 +242,7 @@
       "command": "assertSelectedValue",
       "target": "id=requestPaymentForm-account",
       "targets": [],
-      "value": "string:80803792034 - ALEXSANDRO STEFENON - Caixa Interno"
+      "value": "string:60701190000104 - ITAÚ UNIBANCO S.A. - Conta Bancária Principal"
     }, {
       "id": "876d0341-3fad-4e4c-8e5c-c490a730a2bb",
       "comment": "",
