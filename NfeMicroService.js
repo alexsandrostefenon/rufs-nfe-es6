@@ -110,195 +110,327 @@ UPDATE rufs_service SET fields=jsonb_set(fields::jsonb,'{request,document}','"se
 
 
 if (CrudMicroService.getArg("import-xsd") != undefined) {
-	const convertToOpenapi = (obj) => {
+	const parseXsd = (schemas, types, fileName) => {
+		const xml = fs.readFileSync(fileName, "utf8");
+		xml2js.parseString(xml, (err, obj) => {
+			/*
+pi@pi-desktop:~/workspace/micro_services/rufs-nfe-es6/xsd/PL_009g_V4_00_NT_2020_005_v120$ grep -oP '"\w+":' leiauteNFe_v4.00.xsd.json | sort | uniq
+"attributeFormDefault":
+"base":
+"elementFormDefault":
+"maxOccurs":
+"minOccurs":
+"name":
+"namespace":
+"ref":
+"schemaLocation":
+"targetNamespace":
+"type":
+"use":
+"value":
+"xmlns":
+"xpath":
 
-	}
+pi@pi-desktop:~/workspace/micro_services$ grep -ohP 'xs:\w+' rufs-nfe-es6/xsd/PL_009g_V4_00_NT_2020_005_v120/*.xsd | sort | uniq
+xs:annotation
+xs:any
+xs:anyAttribute
+xs:attribute
+xs:base64Binary
+xs:choice
+xs:complexType
+xs:dateTime
+xs:documentation
+xs:element
+xs:enumeration
+xs:field
+xs:ID
+xs:import
+xs:include
+xs:length
+xs:maxLength
+xs:minLength
+xs:pattern
+xs:restriction
+xs:schema
+xs:selector
+xs:sequence
+xs:simpleType
+xs:string
+xs:token
+xs:unique
+xs:whiteSpace
 
-	const files = CrudMicroService.getArg("import-xsd", ["rufs-nfe-es6/xsd/PL_009g_V4_00_NT_2020_005_v120/leiauteNFe_v4.00.xsd"]);
-	const fileName = files[0];
-	const xml = fs.readFileSync(fileName, "utf8");
-	xml2js.parseStringPromise(xml).
-	then(obj => {
-		fs.writeFileSync(`${fileName}.json`, JSON.stringify(obj, null, "\t"));
-/*
-		"$": {
-			"name": "ide"
-		},
-		"xs:annotation": [
-			{
-				"xs:documentation": [
-					"identificação da NF-e"
-				]
-			}
-		],
-		"xs:complexType": [
-			{
-				"xs:sequence": [
-					{
-						"xs:element": [
-							{
-								"$": {
-									"name": "cUF",
-									"type": "TCodUfIBGE"
-								},
-								"xs:annotation": [
-									{
-										"xs:documentation": [
-											"Código da UF do emitente do Documento Fiscal. Utilizar a Tabela do IBGE."
-										]
-									}
-								]
-							},
-							{
-								"$": {
-									"name": "cNF"
-								},
-								"xs:annotation": [
-									{
-										"xs:documentation": [
-											"Código numérico que compõe a Chave de Acesso. Número aleatório gerado pelo emitente para cada NF-e."
-										]
-									}
-								],
-								"xs:simpleType": [
-									{
-										"xs:restriction": [
+xs:attribute
+xs:base64Binary
+xs:ID
+xs:import
+xs:unique
+xs:selector
+xs:field
+										"xs:attribute": [
 											{
 												"$": {
-													"base": "xs:string"
-												},
-												"xs:whiteSpace": [
+													"name": "Id",
+													"type": "xs:ID",
+													"use": "optional"
+												}
+											}
+										]
+										"xs:simpleType": [
+											{
+												"xs:restriction": [
 													{
 														"$": {
-															"value": "preserve"
-														}
-													}
-												],
-												"xs:pattern": [
-													{
-														"$": {
-															"value": "[0-9]{8}"
-														}
+															"base": "xs:base64Binary"
+														},
+														"xs:length": [
+															{
+																"$": {
+																	"value": "20"
+																}
+															}
+														]
 													}
 												]
 											}
 										]
+13993 :
+																"xs:attribute": [
+																	{
+																		"$": {
+																			"name": "nItem",
+																			"use": "required"
+																		},
+																		"xs:annotation": [
+																			{
+																				"xs:documentation": [
+																					"Número do item do NF"
+																				]
+																			}
+																		],
+																		"xs:simpleType": [
+																			{
+																				"xs:restriction": [
+																					{
+																						"$": {
+																							"base": "xs:string"
+																						},
+																						"xs:whiteSpace": [
+																							{
+																								"$": {
+																									"value": "preserve"
+																								}
+																							}
+																						],
+																						"xs:pattern": [
+																							{
+																								"$": {
+																									"value": "[1-9]{1}[0-9]{0,1}|[1-8]{1}[0-9]{2}|[9]{1}[0-8]{1}[0-9]{1}|[9]{1}[9]{1}[0]{1}"
+																								}
+																							}
+																						]
+																					}
+																				]
+																			}
+																		]
+																	}
+																]
+16774 :
+								"xs:unique": [
+									{
+										"$": {
+											"name": "pk_nItem"
+										},
+										"xs:selector": [
+											{
+												"$": {
+													"xpath": "./*"
+												}
+											}
+										],
+										"xs:field": [
+											{
+												"$": {
+													"xpath": "@nItem"
+												}
+											}
+										]
 									}
 								]
-							},
-*/
-		const parseSimpleType = (property, simpleType) => {
-			if (item["xs::restriction"] != null && Array.isArray(item["xs::restriction"]) == true && item["xs::restriction"].length > 0) {
-				const restriction = item["xs::restriction"];
+			*/
+			fs.writeFileSync(`${fileName}.json`, JSON.stringify(obj, null, "\t"));
 
-				if (restriction["$"] != null && restriction["$"].base != null) {
-					property.type = restriction["$"].base.replace(/xs::(\w+)/, "$1");
-				}
-
-				if (item["xs::pattern"] != null && Array.isArray(item["xs::pattern"]) == true && item["xs::pattern"].length > 0) {
-					const pattern = item["xs::pattern"][0];
-
-					if (pattern["$"] != null && pattern["$"].value != null) {
-						property.pattern = restriction["$"].value;
+			const parseDescription = (schema, item) => {
+				for (const annotationItem of (item["xs:annotation"] || [])) {
+					for (const documentationItem of (annotationItem["xs:documentation"] || [])) {
+						schema.description = documentationItem;
 					}
 				}
 			}
-		}
 
-		const process = (schemas, obj) => {
-			if (obj == null || obj["$"] == null || obj["$"].name == null) return;
+			const parseSimpleType = (property, item) => {
+				const parseRestriction = (property, restriction, nameIn, nameOut) => {
+					for (const subItem of (restriction[nameIn] || [])) {
+						if (subItem["$"] != null && subItem["$"].value != null) {
+							property[nameOut] = subItem["$"].value;
+						}
+					}
+				}
 
-			if (obj["xs:complexType"] != null && Array.isArray(obj["xs:complexType"]) == true) {
-				const complexType = obj["xs:complexType"][0];
-				const sequence = complexType["xs:sequence"];
+				parseDescription(property, item);
 
-				if (Array.isArray(sequence) == true) {
-					const sequenceItem = sequence[0];
+				for (const restriction of (item["xs:restriction"] || [])) {
+					if (restriction["$"] != null && restriction["$"].base != null) {
+						property.type = restriction["$"].base.replace(/xs:(\w+)/, "$1");
+					}
 
-					if (sequenceItem != null && Array.isArray(sequenceItem["xs:element"]) == true) {
-						const list = sequenceItem["xs:element"];
-						const schemaName = obj["$"].name;
-						const schema = schemas[schemaName] = {};
-						const properties = schema.properties = {};
+					parseRestriction(property, restriction, "xs:whiteSpace", "x-whiteSpace");
+					parseRestriction(property, restriction, "xs:pattern", "pattern");
+					parseRestriction(property, restriction, "xs:minLength", "minLength");
+					parseRestriction(property, restriction, "xs:maxLength", "maxLength");
+					parseRestriction(property, restriction, "xs:length", "minLength");
+					parseRestriction(property, restriction, "xs:length", "maxLength");
 
-						for (const item of list) {
-							if (item["$"] != null && item["$"].name != null) {
-								const propertyName = item["$"].name;
-								const property = properties[propertyName] = {};
-
-								if (item["$"].type != null) {
-									property.type = item["$"].type;
-								} else if (item["xs::simpleType"] != null && Array.isArray(item["xs::simpleType"]) == true && item["xs::simpleType"].length > 0) {
-									parseSimpleType(property, item["xs::simpleType"][0]);
-								}
-
-								if (item["xs:complexType"] != null) {
-									process(properties, item);
-								}
-							}
+					for (const enumerationItem of (restriction["xs:enumeration"] || [])) {
+						if (enumerationItem["$"] != null && enumerationItem["$"].value != null) {
+							if (property.enum == null) property.enum = [];
+							property.enum.push(enumerationItem["$"].value);
 						}
 					}
 				}
 			}
-		}
 
-		const schemas = {};
+			const parseProperties = (properties, objIn) => {
+				for (const elementItem of (objIn["xs:element"] || [])) {
+					if (elementItem["$"] == null || elementItem["$"].name == null) {
+						console.error();
+						continue;
+					}
 
-		if (obj["xs:schema"] != null) {
-			if (obj["xs:schema"]["xs:complexType"] != null && Array.isArray(obj["xs:schema"]["xs:complexType"]) == true) {
-				for (const item of obj["xs:schema"]["xs:complexType"]) {
-					item["xs:complexType"] = [{"xs:sequence": item["xs:sequence"]}];
-					delete item["xs:sequence"];
-					process(schemas, item);
+					const propertyName = elementItem["$"].name;
+					let property = properties[propertyName] = {};
+					const typeName = elementItem["$"].type;
+					property["x-required"] = elementItem["$"].minOccurs != "0";
+					parseDescription(property, elementItem);
+
+					if (elementItem["$"].maxOccurs != null) {
+						property.type = "array";
+						property.maxItems = Number.parseInt(elementItem["$"].maxOccurs);
+						if (elementItem["$"].minOccurs != null) property.minItems = Number.parseInt(elementItem["$"].minOccurs);
+						property = property.items = {};
+					}
+
+					if (typeName != null) {
+						const field = types[typeName];
+
+						if (field != null) {
+							property.type = field.type;
+
+							for (const name of ["x-whiteSpace", "pattern", "minLength", "maxLength"]) {
+								if (property[name] == null && field[name] != null) property[name] = field[name];
+							}
+						} else {
+							property.type = elementItem["$"].type;
+						}
+					} 
+
+					for (const simpleTypeItem of (elementItem["xs:simpleType"] || [])) {
+						parseSimpleType(property, simpleTypeItem);
+					}
+
+					for (const complexTypeItem of (elementItem["xs:complexType"] || [])) {
+						parseSchema(schemas, types, property, complexTypeItem);
+						console.log(propertyName, property);
+					}
 				}
 			}
-		}
 
-		const requestSchemas = {};
-		const responseSchemas = {};
+			const parseSchema = (schemas, types, schema, obj) => {
+				schema.type = "object";
+				parseDescription(schema, obj);
+				const list = (obj["xs:sequence"] || []).concat(obj["xs:choice"] || []);
 
-		for (const name in schemas) {
-			// TEnviNFe -> TRetEnviNFe
-			// TConsReciNFe -> TRetConsReciNFe
-//			const path = name.replace(/(\w+)Ret(\w+)/, "$1$2");
+				for (const sequenceItem of list) {
+					const properties = schema.properties = {};
 
-			if (name.startsWith("TRet") == true) {
-				const path = name.substring(4);
-				responseSchemas[path] = schemas[name];
-				requestSchemas[path] = schemas["T" + path];
-			} else if (schemas["TRet" + name.substring(1)] == null) {
-				responseSchemas[name] = schemas[name];
+					if (sequenceItem["$"] != null && sequenceItem["$"].minOccurs == "0") {
+						schema["x-required"] = false;
+					} else {
+						schema["x-required"] = true;
+					}
+
+					for (const choiceItem of (sequenceItem["xs:choice"] || [])) {
+						parseProperties(properties, choiceItem);
+					}
+
+					parseProperties(properties, sequenceItem);
+				}
 			}
-		}
 
-		const openapi = OpenApi.fillOpenApi({}, {"methods": ["post"], requestSchemas, "schemas": responseSchemas});
-		const fileNameOut = fileName.match(/(?<name>[\w_\.]+)\.xsd$/).groups.name;
-		console.log(fileNameOut);
-		const instance = new NfeMicroService();
-		instance.storeOpenApi(openapi, `openapi-${fileNameOut}.json`);
-		return openapi;
-		//"xs:complexType"
-		// 1 - convert para openapi
+			const schema = obj["xs:schema"];
+			if (schema == null) return;
 
-		// 2 - grava os arquivos de migração do banco
+			for (const item of (schema["xs:import"] || [])) {
+				if (item["$"] != null && item["$"].schemaLocation != null) {
+					const baseDir = fileName.replace(/(?<baseDir>([^/]*\/)*).*/, "$<baseDir>");
+					parseXsd(schemas, types, baseDir+item["$"].schemaLocation);
+				}
+			}
 
-		// 3 - executa a migração
+			for (const item of (schema["xs:include"] || [])) {
+				if (item["$"] != null && item["$"].schemaLocation != null) {
+					const baseDir = fileName.replace(/(?<baseDir>([^/]*\/)*).*/, "$<baseDir>");
+					parseXsd(schemas, types, baseDir+item["$"].schemaLocation);
+				}
+			}
 
-		// 4 - grava as diferenças de entradas no openapi
-/*
-	//	instance.loadOpenApi();
-		const loginResponse = {};
-		instance.listen().
-		then(() => {
-			fs.writeFileSync(`/tmp/authorization.sh`, text);
-			console.log(text);
+			for (const item of (schema["xs:simpleType"] || [])) {
+				if (item["$"] != null && item["$"].name != null) {
+					const property = types[item["$"].name] = {};
+					parseSimpleType(property, item);
+				}
+			}
+
+			for (const item of (schema["xs:complexType"] || [])) {
+				const schemaName = item["$"].name;
+				const schema = schemas[schemaName] = {};
+				parseSchema(schemas, types, schema, item);
+				console.log(schemaName, schema);
+			}
 		});
-	//	finally(() => instance.server.close()).finally(() => process.exit(0));
-*/
-	}).
-	then(result => {
+	}
 
-	});
+	const fileList = CrudMicroService.getArg("import-xsd", ["rufs-nfe-es6/xsd/PL_009g_V4_00_NT_2020_005_v120/leiauteNFe_v4.00.xsd"]);
+	const schemas = {};
+	const types = {};
+
+	for (const file of fileList)
+		parseXsd(schemas, types, file);
+
+	const requestSchemas = {};
+	const responseSchemas = {};
+
+	for (const name in schemas) {
+		if (name.startsWith("TRet") == true) {
+			const path = name.substring(4);
+			responseSchemas[path] = schemas[name];
+			requestSchemas[path] = schemas["T" + path];
+		} else if (schemas["TRet" + name.substring(1)] == null) {
+			responseSchemas[name] = schemas[name];
+		}
+	}
+
+	const openapi = OpenApi.fillOpenApi({}, {"methods": ["post"], requestSchemas, "schemas": responseSchemas});
+	const fileName = fileList[0];
+	const fileNameOut = fileName.match(/(?<name>[\w_\.]+)\.xsd$/).groups.name;
+	console.log(fileNameOut);
+	const instance = new NfeMicroService();
+	instance.storeOpenApi(openapi, `openapi-${fileNameOut}.json`);
+	// 1 - convert para openapi
+	// 2 - grava os arquivos de migração do banco
+	// 3 - executa a migração
+	// 4 - grava as diferenças de entradas no openapi
 } else {
 	NfeMicroService.checkStandalone();
 }

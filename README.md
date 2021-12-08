@@ -14,13 +14,11 @@ ARCH='arm64';
 ARCH='x64';
 wget -c https://nodejs.org/dist/v12.22.0/node-v12.22.0-linux-$ARCH.tar.xz &&
 tar -xf node-v12.22.0-linux-$ARCH.tar.xz &&
-PATH=./node-v12.22.0-linux-$ARCH/bin/:$PATH;
+PATH=./node-v12.22.0-linux-$ARCH/bin/:./node-v12.22.0-linux-$ARCH/lib/node_modules/npm/bin/node-gyp-bin/:$PATH;
 `
 Install :
 `
-./node-v12.22.0-linux-*/bin/npm install ./rufs-nfe-es6 --ignore-scripts;
-#or
-#yarnpkg install --cwd ./rufs-nfe-es6;
+npm install ./rufs-nfe-es6;
 ln -s node_modules/rufs-* ./;
 `
 ## Run Ecosystem
