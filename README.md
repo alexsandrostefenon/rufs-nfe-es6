@@ -10,11 +10,11 @@ Open terminal and clone this repository with `git clone https://github.com/alexs
 
 Requires NodeJs version >= 12.22.0 :
 `
-ARCH='arm64';
-ARCH='x64';
-wget -c https://nodejs.org/dist/v12.22.0/node-v12.22.0-linux-$ARCH.tar.xz &&
-tar -xf node-v12.22.0-linux-$ARCH.tar.xz &&
-PATH=./node-v12.22.0-linux-$ARCH/bin/:./node-v12.22.0-linux-$ARCH/lib/node_modules/npm/bin/node-gyp-bin/:$PATH;
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash;
+[restart terminal]
+node_version='12.22.5';
+nvm install $node_version;
+ln -s $HOME/.nvm/versions/node/v$node_version/bin/node $HOME/.nvm/versions/node/v$node_version/bin/nodejs;
 `
 Install :
 `
