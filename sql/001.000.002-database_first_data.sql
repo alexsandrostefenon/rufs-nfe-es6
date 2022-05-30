@@ -35,7 +35,39 @@ INSERT INTO rufs_group_owner (name) VALUES ('nfe_guest_group');
 --split
 INSERT INTO rufs_group (name) VALUES ('Mercado');
 
-INSERT INTO rufs_user (rufs_group_owner, name, password, path, menu, roles, routes) SELECT id, 'guest', 'e10adc3949ba59abbe56e057f20f883e', 'request/search', '{"import":{"menu":"actions","label":"Importar","path":"request/import?overwrite.type=1&overwrite.state=10"},"buy":{"menu":"actions","label":"Compra","path":"request/new?overwrite.type=1&overwrite.state=10"},"sale":{"menu":"actions","label":"Venda","path":"request/new?overwrite.type=2&overwrite.state=10"},"requestPayment":{"menu":"form","label":"Financeiro","path":"request_payment/search"},"stock":{"menu":"form","label":"Estoque","path":"stock/search"},"product":{"menu":"form","label":"Produtos","path":"product/search"},"person":{"menu":"form","label":"Clientes e Fornecedores","path":"person/search"},"requests":{"menu":"form","label":"Requisições","path":"request/search"},"account":{"menu":"form","label":"Contas","path":"account/search"}}', '{"rufsGroupOwner":{"get":true},"rufsGroup":{"get":true},"nfeCfop":{"get":true},"bacenCountry":{"get":true},"ibgeUf":{"get":true},"ibgeCity":{"get":true},"ibgeCnae":{"get":true},"camexNcm":{"get":true},"confazCest":{"get":true},"nfeTaxGroup":{"get":true},"person":{"get":true,"post":true,"put":true},"account":{"get":true,"post":true},"stockAction":{"get":true},"requestType":{"get":true},"requestState":{"get":true},"paymentType":{"get":true},"nfeStIcmsOrigem":{"get":true},"product":{"get":true,"post":true,"put":true},"service":{"get":true,"post":true,"put":true},"barcode":{"get":true,"post":true,"put":true},"request":{"get":true,"post":true,"put":true},"requestProduct":{"get":true,"post":true,"put":true,"delete":true},"requestService":{"get":true,"post":true,"put":true,"delete":true},"requestPayment":{"get":true,"post":true,"put":true,"delete":true},"requestNfe":{"get":true,"post":true,"put":true,"delete":true},"requestFreight":{"get":true,"post":true,"put":true,"delete":true},"requestService":{"get":true,"post":true,"put":true,"delete":true},"stock":{"get":true,"post":true,"put":true}}', '[{"path":"/app/request/:action","controller":"RequestController"}]' FROM rufs_group_owner WHERE name='nfe_guest_group';
+INSERT INTO rufs_user (rufs_group_owner, name, password, path, menu, roles, routes) SELECT id, 'guest', 'e10adc3949ba59abbe56e057f20f883e', 'request/search', 
+'{"import":{"menu":"actions","label":"Importar","path":"request/import?overwrite.type=1&overwrite.state=10"},"buy":{"menu":"actions","label":"Compra","path":"request/new?overwrite.type=1&overwrite.state=10"},"sale":{"menu":"actions","label":"Venda","path":"request/new?overwrite.type=2&overwrite.state=10"},"requestPayment":{"menu":"form","label":"Financeiro","path":"request_payment/search"},"stock":{"menu":"form","label":"Estoque","path":"stock/search"},"product":{"menu":"form","label":"Produtos","path":"product/search"},"person":{"menu":"form","label":"Clientes e Fornecedores","path":"person/search"},"requests":{"menu":"form","label":"Requisições","path":"request/search"},"account":{"menu":"form","label":"Contas","path":"account/search"}}', 
+'[
+{"path": "/rufs_group_owner", "mask": 1},
+{"path": "/rufs_group", "mask": 1},
+{"path": "/nfe_cfop", "mask": 1},
+{"path": "/bacen_country", "mask": 1},
+{"path": "/ibge_uf", "mask": 1},
+{"path": "/ibge_city", "mask": 1},
+{"path": "/ibge_cnae", "mask": 1},
+{"path": "/camex_ncm", "mask": 1},
+{"path": "/confaz_cest", "mask": 1},
+{"path": "/nfe_tax_group", "mask": 1},
+{"path": "/person", "mask": 23},
+{"path": "/account", "mask": 23},
+{"path": "/stock_action", "mask": 1},
+{"path": "/request_type", "mask": 1},
+{"path": "/request_state", "mask": 1},
+{"path": "/payment_type", "mask": 1},
+{"path": "/nfe_st_icms_origem", "mask": 1},
+{"path": "/product", "mask": 23},
+{"path": "/service", "mask": 7},
+{"path": "/barcode", "mask": 7},
+{"path": "/request", "mask": 23},
+{"path": "/request_product", "mask": 23},
+{"path": "/request_service", "mask": 23},
+{"path": "/request_payment", "mask": 23},
+{"path": "/request_nfe", "mask": 23},
+{"path": "/request_freight", "mask": 23},
+{"path": "/stock", "mask": 7}
+]', 
+'[{"path":"/app/request/:action","controller":"RequestController"}]' 
+FROM rufs_group_owner WHERE name='nfe_guest_group';
 
 INSERT INTO rufs_group_user (rufs_user, rufs_group) SELECT u.id, g.id FROM rufs_user AS u, rufs_group AS g WHERE u.name='guest' AND g.name='Mercado';
 
