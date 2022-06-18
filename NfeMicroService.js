@@ -35,12 +35,10 @@ class NfeMicroService extends CrudMicroService {
 
 	loadOpenApi() {
 		return super.loadOpenApi().
-		then(openapi => {
-			if (openapi.components.schemas.requestProduct != null) openapi.components.schemas.requestProduct.properties.request["x-title"] = "Produtos";
-			if (openapi.components.schemas.requestPayment != null) openapi.components.schemas.requestPayment.properties.request["x-title"] = "Pagamentos";
-			this.openapi = openapi;
-			return openapi;
-		});
+		then(() => {
+			if (this.openapi.components.schemas.requestProduct != null) this.openapi.components.schemas.requestProduct.properties.request["x-title"] = "Produtos";
+			if (this.openapi.components.schemas.requestPayment != null) this.openapi.components.schemas.requestPayment.properties.request["x-title"] = "Pagamentos";
+		})
 /*
 INSERT INTO rufs_service (name, title, fields) VALUES ('paymentType', 'Tipo de Pagamento', '{}');
 INSERT INTO rufs_service (name, title, fields) VALUES ('bacenCountry', 'Códigos de Países', '{}');
@@ -75,8 +73,8 @@ UPDATE rufs_service SET fields=jsonb_set(fields::jsonb,'{request,document}','"se
 */
 	}
 
-	onRequest(req, res, next, resource, action) {
-		console.log(`[NfeMicroService.onRequest] : ${action}`);
+	onRequest(req, res, next) {
+		console.log(`[NfeMicroService.onRequest] : ${req.path}`);
 
 		if (req.path == "/ASP/AAE_ROOT/NFE/SAT-WEB-NFE-COM_2.asp") {
 			const url = "https://www.sefaz.rs.gov.br" + req.url;
@@ -102,7 +100,7 @@ UPDATE rufs_service SET fields=jsonb_set(fields::jsonb,'{request,document}','"se
 				return Response.ok({data});
 			});
 		} else {
-			return super.onRequest(req, res, next, resource, action);
+			return super.onRequest(req, res, next);
 		}
 	}
 
@@ -421,12 +419,12 @@ xs:field
 		}
 	}
 
-	const openapi = OpenApi.fillOpenApi({}, {"methods": ["post"], requestSchemas, "schemas": responseSchemas});
+	this.openapi = OpenApi.fillOpenApi({}, {"methods": ["post"], requestSchemas, "schemas": responseSchemas});
 	const fileName = fileList[0];
 	const fileNameOut = fileName.match(/(?<name>[\w_\.]+)\.xsd$/).groups.name;
 	console.log(fileNameOut);
 	const instance = new NfeMicroService();
-	instance.storeOpenApi(openapi, `openapi-${fileNameOut}.json`);
+	instance.storeOpenApi(`openapi-${fileNameOut}.json`);
 	// 1 - convert para openapi
 	// 2 - grava os arquivos de migração do banco
 	// 3 - executa a migração

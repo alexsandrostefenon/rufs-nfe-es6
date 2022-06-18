@@ -227,7 +227,8 @@ CREATE TABLE request_state (
 	stock_action integer references stock_action,
 	description varchar(100),
 	next integer default 1,
-	prev integer
+	prev integer,
+	unique(type,name)
 );
 
 CREATE TABLE request (
