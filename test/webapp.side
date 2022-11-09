@@ -2,7 +2,7 @@
   "id": "5ebf3ab3-7a16-4ca5-bc32-95e2ddbf6e1b",
   "version": "2.0",
   "name": "webapp",
-  "url": "http://localhost:8080/nfe/",
+  "url": "http://localhost:9080/",
   "tests": [{
     "id": "a634f1aa-1398-4f5e-8b60-14bc2320cbf0",
     "name": "request_buy_new",
@@ -1303,7 +1303,7 @@
         ["xpath=//div[@id='main']/form/div[3]/input", "xpath:idRelative"],
         ["xpath=//div[3]/input", "xpath:position"]
       ],
-      "value": "admin"
+      "value": "123456"
     }, {
       "id": "6731c3f3-df21-4dc7-b65b-b18e46200f18",
       "comment": "",
@@ -1689,7 +1689,7 @@
         ["xpath=//div[@id='http-error']/strong", "xpath:idRelative"],
         ["xpath=//strong", "xpath:position"]
       ],
-      "value": "Unauthorized : Don't match user and password."
+      "value": "Unauthorized : don't match user and password."
     }]
   }, {
     "id": "abf68466-c657-48ac-96de-5400f8a9090f",
@@ -2352,6 +2352,6 @@
     "timeout": 3000,
     "tests": ["bcc3dc1b-75c9-4b9d-af0f-657ccc9dbc56", "459c824d-1825-4183-90db-145872eac86e", "a634f1aa-1398-4f5e-8b60-14bc2320cbf0", "1e9f3675-4bd4-4450-a7a6-c31b52b5e3b8", "eeb9e8f0-7a60-4b9d-9422-86d8f667fe4d", "a4720c93-1155-49f1-940e-1240e2c6adf6", "5cf4355e-0362-4c5a-8dc8-d8be0e765c91"]
   }],
-  "urls": ["https://192.168.2.139:8443/angular-es6-crud-nodejs-j2ee7", "https://192.168.2.139:8443/", "https://localhost:9443/crud", "https://localhost:8443/angular-es6-crud-nodejs-j2ee7", "https://localhost:7443/", "http://localhost:8080/crud", "http://localhost:8090/crud/", "http://localhost:8080/crud/", "http://localhost:8080/nfe/"],
+  "urls": ["https://192.168.2.139:8443/angular-es6-crud-nodejs-j2ee7", "https://192.168.2.139:8443/", "https://localhost:9443/crud", "https://localhost:8443/angular-es6-crud-nodejs-j2ee7", "https://localhost:7443/", "http://localhost:8080/crud", "http://localhost:8090/crud/", "http://localhost:8080/crud/", "http://localhost:8080/nfe/", "http://localhost:9080/"],
   "plugins": []
 }

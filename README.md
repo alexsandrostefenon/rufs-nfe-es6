@@ -44,7 +44,6 @@ Note, database "rufs_nfe_development" is only for testing purposes.
 
 #Only to clean already existent configuration :
 
-rm *openapi-nfe.json;
 
 #Only to clean already existent testing data :
 
@@ -53,13 +52,14 @@ export PGPORT=5432;
 export PGUSER=development;
 export PGPASSWORD=123456;
 
+rm *openapi-nfe.json; \
 psql rufs_nfe_development -c "DROP DATABASE IF EXISTS rufs_nfe;" &&
 psql rufs_nfe_development -c "CREATE DATABASE rufs_nfe;" &&
 
 #Execute rufs-proxy to load and start microservices :
 
-PGHOST=localhost PGPORT=5432 PGUSER=development PGPASSWORD=123456 PGDATABASE=rufs_nfe nodejs ./rufs-base-es6/proxy.js --add-modules ../rufs-nfe-es6/NfeMicroService.js;
-#PGHOST=localhost PGPORT=5432 PGUSER=development PGPASSWORD=123456 PGDATABASE=rufs_nfe nodejs --inspect ./rufs-nfe-es6/NfeMicroService.js;
+#PGHOST=localhost PGPORT=5432 PGUSER=development PGPASSWORD=123456 PGDATABASE=rufs_nfe nodejs ./rufs-base-es6/proxy.js --add-modules ../rufs-nfe-es6/NfeMicroService.js;
+PGHOST=localhost PGPORT=5432 PGUSER=development PGPASSWORD=123456 PGDATABASE=rufs_nfe nodejs --inspect ./rufs-nfe-es6/NfeMicroService.js;
 
 ## Web application
 
